@@ -16,21 +16,21 @@ public class SeparatingAxis {
 		Vec2f center = circle.getCenter();
 		float radius = circle.getRadius();
 		
-		Vec2f min = center.minus(radius, radius).projectOnto(axis);
-		Vec2f max = center.plus(radius, radius).projectOnto(axis);
+		float min = center.minus(radius, radius).projectOnto(axis).mag();
+		float max = center.plus(radius, radius).projectOnto(axis).mag();
 		return new Range(min, max);
 	}
 	
 	public Range project(AAB aab) {
-		Vec2f min = new Vec2f(Float.MAX_VALUE, Float.MAX_VALUE);
-		Vec2f max = new Vec2f(Float.MIN_VALUE, Float.MIN_VALUE);
+		float min = Float.MAX_VALUE;
+		float max = -Float.MAX_VALUE;
 		List<Vec2f> points = aab.getPoints();
 		for (Vec2f point : points) {
-			Vec2f projection = point.projectOnto(axis);
-			if (projection.mag2() < min.mag2()) {
+			float projection = point.projectOnto(axis).mag();
+			if (projection < min) {
 				min = projection;
 			}
-			if (projection.mag2() > max.mag2()) {
+			if (projection > max) {
 				max = projection;
 			}
 		}
@@ -38,15 +38,15 @@ public class SeparatingAxis {
 	}
 	
 	public Range project(Polygon polygon) {
-		Vec2f min = new Vec2f(Float.MAX_VALUE, Float.MAX_VALUE);
-		Vec2f max = new Vec2f(Float.MIN_VALUE, Float.MIN_VALUE);
+		float min = Float.MAX_VALUE;
+		float max = -Float.MAX_VALUE;
 		List<Vec2f> points = polygon.getPoints();
 		for (Vec2f point : points) {
-			Vec2f projection = point.projectOnto(axis);
-			if (projection.mag2() < min.mag2()) {
+			float projection = point.projectOnto(axis).mag();
+			if (projection < min) {
 				min = projection;
 			}
-			if (projection.mag2() > max.mag2()) {
+			if (projection > max) {
 				max = projection;
 			}
 		}
