@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import cs195n.Vec2f;
 
@@ -14,7 +16,6 @@ public class Polygon extends SingleShape {
 
 	public Polygon(Vec2f position, Color fillColor, Vec2f... points) {
 		super(position, fillColor, fillColor);
-		
 		this.points = new ArrayList<Vec2f>();
 		for (Vec2f point : points) {
 			this.points.add(point);
@@ -22,19 +23,39 @@ public class Polygon extends SingleShape {
 	}
 
 	@Override
-	public boolean collides(CollidingShape shape) {
+	public Vec2f collides(CollidingShape shape) {
 		return shape.collidesPolygon(this);
 	}
 
 	@Override
-	public boolean collidesCircle(Circle circle) {
-		if (!checkAxis(circle) || !circle.checkAxis(this)) {
-			return false;
-		}
-		return true;
+	public Vec2f collidesCircle(Circle circle) {
+		Set<SeparatingAxis> thisAxes = this.getAxes();
+		Set<SeparatingAxis> thatAxes = circle.getAxes(this);
+		
+		thisAxes.addAll(thatAxes);
+		return mtv(thisAxes, circle);
+	}
+
+	@Override
+	public Vec2f collidesAAB(AAB aab) {
+		Set<SeparatingAxis> thisAxes = this.getAxes();
+		Set<SeparatingAxis> thatAxes = aab.getAxes();
+		
+		thisAxes.addAll(thatAxes);
+		return mtv(thisAxes, aab);
 	}
 	
-	public boolean checkAxis(Circle circle) {
+	@Override
+	public Vec2f collidesPolygon(Polygon polygon) {
+		Set<SeparatingAxis> thisAxes = this.getAxes();
+		Set<SeparatingAxis> thatAxes = polygon.getAxes();
+		
+		thisAxes.addAll(thatAxes);
+		return mtv(thisAxes, polygon);
+	}
+	
+	public Set<SeparatingAxis> getAxes() {
+		Set<SeparatingAxis> axes = new HashSet<SeparatingAxis>();
 		for (int i=0; i<points.size(); i++) {
 			Vec2f startPoint = points.get(i);
 			Vec2f endPoint;
@@ -45,80 +66,26 @@ public class Polygon extends SingleShape {
 			}
 			Vec2f edgeVector = endPoint.minus(startPoint);
 			SeparatingAxis axis = new SeparatingAxis(new Vec2f(edgeVector.y, -edgeVector.x));
-			Range range1 = axis.project(this);
-			Range range2 = axis.project(circle);
-			if (!range1.overlaps(range2)) {
-				return false;
-			}
+			axes.add(axis);
 		}
-		return true;
-	}
-
-	@Override
-	public boolean collidesAAB(AAB aab) {
-		if (!checkAxis(aab) || !aab.checkAxis(this)) {
-			return false;
-		}
-		return true;
-	}
-	
-	public boolean checkAxis(AAB aab) {
-		for (int i=0; i<points.size(); i++) {
-			Vec2f startPoint = points.get(i);
-			Vec2f endPoint;
-			if (i<points.size()-1) {
-				endPoint = points.get(i+1);
-			} else {
-				endPoint = points.get(0);
-			}
-			Vec2f edgeVector = endPoint.minus(startPoint);
-			SeparatingAxis axis = new SeparatingAxis(new Vec2f(edgeVector.y, -edgeVector.x));
-			Range range1 = axis.project(this);
-			Range range2 = axis.project(aab);
-			if (!range1.overlaps(range2)) {
-				return false;
-			}
-		}
-		return true;
+		return axes;
 	}
 	
 	@Override
-	public boolean collidesPolygon(Polygon polygon) {
-		if (!checkAxis(polygon) || !polygon.checkAxis(this)) {
-			return false;
-		}
-		return true;
-	}
-
-	public boolean checkAxis(Polygon polygon) {
-		for (int i=0; i<points.size(); i++) {
-			Vec2f startPoint = points.get(i);
-			Vec2f endPoint;
-			if (i<points.size()-1) {
-				endPoint = points.get(i+1);
-			} else {
-				endPoint = points.get(0);
-			}
-			Vec2f edgeVector = endPoint.minus(startPoint);
-			SeparatingAxis axis = new SeparatingAxis(new Vec2f(edgeVector.y, -edgeVector.x));
-			Range range1 = axis.project(this);
-			Range range2 = axis.project(polygon);
-			if (!range1.overlaps(range2)) {
-				return false;
-			}
-		}
-		return true;
+	public Range projectTo(SeparatingAxis axis) {
+		return axis.project(this);
 	}
 
 	@Override
-	public boolean collidesCompoundShape(CompoundShape compound) {
+	public Vec2f collidesCompoundShape(CompoundShape compound) {
 		List<CollidingShape> shapes = compound.getShapes();
 		for (CollidingShape shape : shapes) {
-			if (shape.collidesPolygon(this)) {
-				return true;
+			Vec2f mtv = shape.collidesPolygon(this);
+			if (mtv != null) {
+				return mtv;
 			}
 		}
-		return false;
+		return null;
 	}
 
 	@Override
@@ -134,6 +101,18 @@ public class Polygon extends SingleShape {
 
 	public List<Vec2f> getPoints() {
 		return points;
+	}
+
+	@Override
+	public Vec2f center() {
+		float xCenter = 0;
+		float yCenter = 0;
+		int npoints = points.size();
+		for (Vec2f point : points) {
+			xCenter += point.x;
+			yCenter += point.y;
+		}
+		return new Vec2f(xCenter/npoints, yCenter/npoints);
 	}
 
 }

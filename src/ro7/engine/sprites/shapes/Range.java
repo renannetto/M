@@ -14,5 +14,18 @@ public class Range {
 	public boolean overlaps(Range range2) {
 		return this.min <= range2.max && range2.min <= this.max;
 	}
+	
+	public Float mtv(Range range2) {
+		float left = range2.max - this.min;
+		float right = this.max - range2.min;
+		
+		if (left < 0 || right < 0) {
+			return null;
+		}
+		if (left < right) {
+			return -left;
+		}
+		return right;
+	}
 
 }

@@ -3,6 +3,7 @@ package ro7.engine.world;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import cs195n.Vec2f;
 
@@ -10,10 +11,12 @@ public abstract class GameWorld {
 
 	protected Vec2f dimensions;
 	protected List<Entity> entities;
+	protected List<CollidableEntity> collidables;
 
 	protected GameWorld(Vec2f dimensions) {
 		this.dimensions = dimensions;
 		entities = new ArrayList<Entity>();
+		collidables = new ArrayList<CollidableEntity>();
 	}
 
 	/**
@@ -27,11 +30,32 @@ public abstract class GameWorld {
 		for (Entity entity : entities) {
 			entity.draw(g);
 		}
+		for (CollidableEntity collidable : collidables) {
+			collidable.draw(g);
+		}
 	}
 	
 	public void update(long nanoseconds) {
 		for (Entity entity : entities) {
 			entity.update(nanoseconds);
+		}
+		for (CollidableEntity collidable : collidables) {
+			collidable.update(nanoseconds);
+		}
+		for (CollidableEntity collidableA : collidables) {
+			for (CollidableEntity collidableB : collidables) {
+				if (!collidableA.equals(collidableB)) {
+					Map<CollidableEntity, Collision> collisions = collidableA.collides(collidableB);
+					Collision collisionA = collisions.get(collidableA);
+					Collision collisionB = collisions.get(collidableB);
+					if (collisionA.validCollision()) {
+						collidableA.onCollision(collisionA);
+					}
+					if (collisionB.validCollision()) {
+						collidableB.onCollision(collisionB);
+					}
+				}
+			}
 		}
 	}
 

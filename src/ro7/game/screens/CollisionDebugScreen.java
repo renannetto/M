@@ -20,7 +20,9 @@ import ro7.engine.sprites.shapes.Polygon;
 
 public class CollisionDebugScreen extends Screen {
 
-	List<CollidingShape> shapes = new ArrayList<CollidingShape>();
+	private List<CollidingShape> shapes = new ArrayList<CollidingShape>();
+	private int shape1 = 0;
+	private int shape2 = 0;
 
 	public CollisionDebugScreen(Application app) {
 		super(app);
@@ -31,9 +33,12 @@ public class CollisionDebugScreen extends Screen {
 		for (CollidingShape shapeA : shapes) {
 			shapeA.changeFillColor(Color.GREEN);
 			for (CollidingShape shapeB : shapes) {
-				if (!shapeA.equals(shapeB) && shapeA.collides(shapeB)) {
-					shapeA.changeFillColor(Color.RED);
-					shapeB.changeFillColor(Color.RED);
+				if (!shapeA.equals(shapeB)) {
+					Vec2f mtv = shapeA.collides(shapeB);
+					if (mtv != null) {
+						shapeA.changeFillColor(Color.RED);
+						shapeB.changeFillColor(Color.RED);
+					}
 				}
 			}
 		}
@@ -54,8 +59,15 @@ public class CollisionDebugScreen extends Screen {
 
 	@Override
 	public void onKeyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-
+		int keyCode = e.getKeyCode();
+		switch (keyCode) {
+		case 49:
+			shape1 = (shape1 + 1) % 4;
+			break;
+		case 50:
+			shape2 = (shape2 + 1) % 4;
+			break;
+		}
 	}
 
 	@Override
@@ -77,23 +89,38 @@ public class CollisionDebugScreen extends Screen {
 
 		CollidingShape shape;
 		if (button == 1) {
-			Vec2f pointVector = new Vec2f(point.x, point.y);
-			shape = new Polygon(pointVector, Color.GREEN,
-					pointVector, new Vec2f(pointVector.x - 20.0f,
-							pointVector.y - 20.0f), new Vec2f(
-							pointVector.x - 40.0f, pointVector.y));
+			shape = createShape(point, shape1);
 		} else {
-			Vec2f pointVector = new Vec2f(point.x, point.y);
-			// shape = new AAB(new Vec2f(point.x, point.y), Color.GREEN,
-			// Color.GREEN, new Vec2f(50.0f, 25.0f));
-			 shape = new Circle(new Vec2f(point.x, point.y),
-						 Color.GREEN, Color.GREEN, 15.0f);
-//			 shape = new CompoundShape(pointVector, new Circle(pointVector,
-//				 Color.GREEN, Color.GREEN, 15.0f),
-//				 new AAB(new Vec2f(point.x, point.y+15.0f), Color.GREEN,
-//				 Color.GREEN, new Vec2f(25.0f, 50.0f)));
+			shape = createShape(point, shape2);
 		}
 		shapes.add(shape);
+	}
+
+	private CollidingShape createShape(Point point, int shapeCode) {
+		CollidingShape shape = null;
+		Vec2f pointVector = new Vec2f(point.x, point.y);
+		switch (shapeCode) {
+		case 0:
+			shape = new AAB(new Vec2f(point.x, point.y), Color.GREEN,
+					Color.GREEN, new Vec2f(50.0f, 25.0f));
+			break;
+		case 1:
+			shape = new Circle(new Vec2f(point.x, point.y), Color.GREEN,
+					Color.GREEN, 15.0f);
+			break;
+		case 2:
+			shape = new CompoundShape(pointVector, new Circle(pointVector,
+					Color.GREEN, Color.GREEN, 15.0f), new AAB(new Vec2f(
+					point.x, point.y + 15.0f), Color.GREEN, Color.GREEN,
+					new Vec2f(25.0f, 50.0f)));
+			break;
+		case 3:
+			shape = new Polygon(pointVector, Color.GREEN, pointVector,
+					new Vec2f(pointVector.x - 20.0f, pointVector.y - 20.0f),
+					new Vec2f(pointVector.x - 40.0f, pointVector.y));
+			break;
+		}
+		return shape;
 	}
 
 	@Override

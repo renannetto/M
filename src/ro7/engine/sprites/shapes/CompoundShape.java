@@ -25,48 +25,52 @@ public class CompoundShape extends CollidingShape {
 	}
 
 	@Override
-	public boolean collides(CollidingShape shape) {
+	public Vec2f collides(CollidingShape shape) {
 		return shape.collidesCompoundShape(this);
 	}
 
 	@Override
-	public boolean collidesCircle(Circle circle) {
+	public Vec2f collidesCircle(Circle circle) {
 		for (CollidingShape shape : shapes) {
-			if (shape.collidesCircle(circle)) {
-				return true;
+			Vec2f mtv = shape.collidesCircle(circle);
+			if (mtv != null) {
+				return mtv;
 			}
 		}
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean collidesAAB(AAB aab) {
+	public Vec2f collidesAAB(AAB aab) {
 		for (CollidingShape shape : shapes) {
-			if (shape.collidesAAB(aab)) {
-				return true;
+			Vec2f mtv = shape.collidesAAB(aab);
+			if (mtv != null) {
+				return mtv;
 			}
 		}
-		return false;
+		return null;
 	}
 	
 	@Override
-	public boolean collidesPolygon(Polygon polygon) {
+	public Vec2f collidesPolygon(Polygon polygon) {
 		for (CollidingShape shape : shapes) {
-			if (shape.collidesPolygon(polygon)) {
-				return true;
+			Vec2f mtv = shape.collidesPolygon(polygon);
+			if (mtv != null) {
+				return mtv;
 			}
 		}
-		return false;
+		return null;
 	}
 
 	@Override
-	public boolean collidesCompoundShape(CompoundShape compound) {
+	public Vec2f collidesCompoundShape(CompoundShape compound) {
 		for (CollidingShape shape : shapes) {
-			if (shape.collidesCompoundShape(compound)) {
-				return true;
+			Vec2f mtv = shape.collidesCompoundShape(compound);
+			if (mtv != null) {
+				return mtv;
 			}
 		}
-		return false;
+		return null;
 	}
 
 	@Override
@@ -88,6 +92,18 @@ public class CompoundShape extends CollidingShape {
 		for (CollidingShape shape : shapes) {
 			shape.changeFillColor(color);
 		}
+	}
+
+	@Override
+	public Range projectTo(SeparatingAxis axis) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Vec2f center() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

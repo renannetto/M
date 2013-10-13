@@ -13,7 +13,7 @@ public class SeparatingAxis {
 	}
 	
 	public Range project(Circle circle) {
-		Vec2f center = circle.getCenter();
+		Vec2f center = circle.center();
 		float radius = circle.getRadius();
 		
 		float min = center.minus(radius, radius).projectOnto(axis).mag();
@@ -52,5 +52,11 @@ public class SeparatingAxis {
 		}
 		return new Range(min, max);
 	}
+
+	public Vec2f smult(float minMagnitude) {
+		return axis.smult(minMagnitude);
+	}
+	
+	
 
 }

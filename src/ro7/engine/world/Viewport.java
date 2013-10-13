@@ -123,7 +123,7 @@ public class Viewport {
 	 * @param g Graphics object used to draw
 	 */
 	public void draw(Graphics2D g) {
-		AAB viewport = new AAB(position.plus(dimensions.sdiv(2.0f)),
+		AAB viewport = new AAB(position,
 				Color.BLACK, null, dimensions);
 		viewport.draw(g);
 

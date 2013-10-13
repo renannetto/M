@@ -5,7 +5,9 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import cs195n.Vec2f;
 
@@ -15,18 +17,18 @@ public class AAB extends SingleShape {
 
 	public AAB(Vec2f position, Color borderColor, Color fillColor,
 			Vec2f dimensions) {
-		super(position.minus(dimensions.sdiv(2.0f)), borderColor, fillColor);
+		super(position, borderColor, fillColor);
 		this.dimensions = dimensions;
 	}
 
 	@Override
-	public boolean collides(CollidingShape shape) {
+	public Vec2f collides(CollidingShape shape) {
 		return shape.collidesAAB(this);
 	}
 
 	@Override
-	public boolean collidesCircle(Circle circle) {
-		Vec2f center = circle.getCenter();
+	public Vec2f collidesCircle(Circle circle) {
+		Vec2f center = circle.center();
 		Vec2f minAAB = this.getPosition();
 		Vec2f maxAAB = minAAB.plus(this.getDimensions());
 
@@ -53,56 +55,65 @@ public class AAB extends SingleShape {
 
 		float radius = circle.getRadius();
 
-		return distance <= (radius * radius);
+		if (distance > (radius * radius)) {
+			return null;
+		}
+
+		if (point.equals(center)) {
+			return mtv(this.getAxes(), circle);
+		}
+
+		return point.minus(center).plus(radius, 0.0f);
 	}
 
 	@Override
-	public boolean collidesAAB(AAB aab) {
+	public Vec2f collidesAAB(AAB aab) {
 		Vec2f minThis = this.position;
 		Vec2f maxThis = minThis.plus(this.dimensions);
 		Vec2f minAAB = aab.position;
 		Vec2f maxAAB = minAAB.plus(aab.dimensions);
 
-		return minThis.x <= maxAAB.x && maxThis.x >= minAAB.x
-				&& minThis.y <= maxAAB.y && maxThis.y >= minAAB.y;
-	}
-	
-	@Override
-	public boolean collidesPolygon(Polygon polygon) {
-		if (!checkAxis(polygon) || !polygon.checkAxis(this)) {
-			return false;
-		}
-		return true;
-	}
-	
-	public boolean checkAxis(Polygon polygon) {
-		Vec2f edgeY = new Vec2f(0.0f, -dimensions.y);
-		SeparatingAxis axis = new SeparatingAxis(new Vec2f(edgeY.y, -edgeY.x));
-		Range range1 = axis.project(this);
-		Range range2 = axis.project(polygon);
-		if (!range1.overlaps(range2)) {
-			return false;
+		if (!(minThis.x <= maxAAB.x && maxThis.x >= minAAB.x
+				&& minThis.y <= maxAAB.y && maxThis.y >= minAAB.y)) {
+			return null;
 		}
 		
-		Vec2f edgeX = new Vec2f(-dimensions.x, 0.0f);
-		axis = new SeparatingAxis(new Vec2f(edgeX.y, -edgeX.x));
-		range1 = axis.project(this);
-		range2 = axis.project(polygon);
-		if (!range1.overlaps(range2)) {
-			return false;
-		}
-		return true;
+		Set<SeparatingAxis> thisAxes = this.getAxes();
+
+		return mtv(thisAxes, aab);
 	}
 
 	@Override
-	public boolean collidesCompoundShape(CompoundShape compound) {
+	public Vec2f collidesPolygon(Polygon polygon) {
+		Set<SeparatingAxis> thisAxes = this.getAxes();
+		Set<SeparatingAxis> thatAxes = polygon.getAxes();
+
+		thisAxes.addAll(thatAxes);
+		return mtv(thisAxes, polygon);
+	}
+
+	@Override
+	public Vec2f collidesCompoundShape(CompoundShape compound) {
 		List<CollidingShape> shapes = compound.getShapes();
 		for (CollidingShape shape : shapes) {
-			if (shape.collidesAAB(this)) {
-				return true;
+			Vec2f mtv = shape.collidesAAB(this);
+			if (mtv != null) {
+				return mtv;
 			}
 		}
-		return false;
+		return null;
+	}
+
+	public Set<SeparatingAxis> getAxes() {
+		Set<SeparatingAxis> axes = new HashSet<SeparatingAxis>();
+		axes.add(new SeparatingAxis(new Vec2f(1.0f, 0.0f)));
+		axes.add(new SeparatingAxis(new Vec2f(0.0f, 1.0f)));
+		return axes;
+	}
+
+	@Override
+	public Range projectTo(SeparatingAxis axis) {
+		return axis.project(this);
 	}
 
 	@Override
@@ -135,6 +146,11 @@ public class AAB extends SingleShape {
 		points.add(position.plus(dimensions.x, dimensions.y));
 		points.add(position.plus(dimensions.x, 0.0f));
 		return points;
+	}
+
+	@Override
+	public Vec2f center() {
+		return position.plus(dimensions.sdiv(2.0f));
 	}
 
 }
