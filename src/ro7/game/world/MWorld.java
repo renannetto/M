@@ -9,7 +9,7 @@ import ro7.engine.world.PhysicalEntity;
 
 public class MWorld extends GameWorld {
 	
-	private final float WALL_SIZE = 20.0f;
+	private final float WALL_SIZE = 50.0f;
 	private final Vec2f GRAVITY = new Vec2f(0.0f, 50.0f);
 	
 	private Player player;
@@ -30,7 +30,7 @@ public class MWorld extends GameWorld {
 		Wall rightWall = new Wall(this, new Vec2f(dimensions.x-WALL_SIZE, WALL_SIZE), new Vec2f(WALL_SIZE, dimensions.y-2*WALL_SIZE));
 		collidables.add(rightWall);
 		physEntities.add(rightWall);
-		Wall ceiling = new Wall(this, new Vec2f(0.0f, 0.0f), new Vec2f(dimensions.x, WALL_SIZE));
+		Wall ceiling = new Wall(this, new Vec2f(-WALL_SIZE, 0.0f), new Vec2f(dimensions.x+WALL_SIZE, WALL_SIZE));
 		collidables.add(ceiling);
 		physEntities.add(ceiling);
 		
@@ -38,9 +38,9 @@ public class MWorld extends GameWorld {
 		collidables.add(player);
 		physEntities.add(player);
 		
-//		HeavyObject heavy = new HeavyObject(this, new Vec2f(3*dimensions.x/4.0f, dimensions.y/2.0f));
-//		collidables.add(heavy);
-//		physEntities.add(heavy);
+		HeavyObject heavy = new HeavyObject(this, new Vec2f(3*dimensions.x/4.0f, dimensions.y/2.0f));
+		collidables.add(heavy);
+		physEntities.add(heavy);
 		
 		LightObject light = new LightObject(this, new Vec2f(dimensions.x/4.0f, dimensions.y/2.0f));
 		collidables.add(light);

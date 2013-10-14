@@ -33,7 +33,14 @@ public class Polygon extends SingleShape {
 		Set<SeparatingAxis> thatAxes = circle.getAxes(this);
 		
 		thisAxes.addAll(thatAxes);
-		return mtv(thisAxes, circle);
+		Vec2f shapeMtv = mtv(thisAxes, circle);
+		if (shapeMtv != null) {	
+			Vec2f centerDistance = circle.center().minus(this.center());
+			if (shapeMtv.dot(centerDistance) < 0) {
+				shapeMtv = shapeMtv.smult(-1.0f);
+			}
+		}
+		return shapeMtv;
 	}
 
 	@Override
@@ -42,7 +49,14 @@ public class Polygon extends SingleShape {
 		Set<SeparatingAxis> thatAxes = aab.getAxes();
 		
 		thisAxes.addAll(thatAxes);
-		return mtv(thisAxes, aab);
+		Vec2f shapeMtv = mtv(thisAxes, aab);
+		if (shapeMtv != null) {	
+			Vec2f centerDistance = aab.center().minus(this.center());
+			if (shapeMtv.dot(centerDistance) < 0) {
+				shapeMtv = shapeMtv.smult(-1.0f);
+			}
+		}
+		return shapeMtv;
 	}
 	
 	@Override
@@ -51,7 +65,14 @@ public class Polygon extends SingleShape {
 		Set<SeparatingAxis> thatAxes = polygon.getAxes();
 		
 		thisAxes.addAll(thatAxes);
-		return mtv(thisAxes, polygon);
+		Vec2f shapeMtv = mtv(thisAxes, polygon);
+		if (shapeMtv != null) {	
+			Vec2f centerDistance = polygon.center().minus(this.center());
+			if (shapeMtv.dot(centerDistance) < 0) {
+				shapeMtv = shapeMtv.smult(-1.0f);
+			}
+		}
+		return shapeMtv;
 	}
 	
 	public Set<SeparatingAxis> getAxes() {

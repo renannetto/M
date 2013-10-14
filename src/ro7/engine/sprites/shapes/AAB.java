@@ -63,7 +63,12 @@ public class AAB extends SingleShape {
 			return mtv(this.getAxes(), circle);
 		}
 
-		return point.minus(center).plus(radius, 0.0f);
+		Vec2f circleCenter = circle.center();
+		Vec2f dist = new Vec2f(Math.abs(point.x-circleCenter.x), Math.abs(point.y-circleCenter.y));
+		Set<SeparatingAxis> axes = new HashSet<SeparatingAxis>();
+		axes.add(new SeparatingAxis(dist));
+		
+		return mtv(axes, circle);
 	}
 
 	@Override
@@ -89,7 +94,14 @@ public class AAB extends SingleShape {
 		Set<SeparatingAxis> thatAxes = polygon.getAxes();
 
 		thisAxes.addAll(thatAxes);
-		return mtv(thisAxes, polygon);
+		Vec2f shapeMtv = mtv(thisAxes, polygon);
+		if (shapeMtv != null) {
+			Vec2f centerDistance = polygon.center().minus(this.center());
+			if (shapeMtv.dot(centerDistance) < 0) {
+				shapeMtv = shapeMtv.smult(-1.0f);
+			}
+		}
+		return shapeMtv;
 	}
 
 	@Override

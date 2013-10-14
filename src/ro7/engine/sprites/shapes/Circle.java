@@ -84,8 +84,10 @@ public class Circle extends SingleShape {
 			return mtv(aab.getAxes(), aab);
 		}
 
+		Vec2f circleCenter = this.center();
+		Vec2f dist = new Vec2f(Math.abs(point.x-circleCenter.x), Math.abs(point.y-circleCenter.y));
 		Set<SeparatingAxis> axes = new HashSet<SeparatingAxis>();
-		axes.add(new SeparatingAxis(this.center().minus(point)));
+		axes.add(new SeparatingAxis(dist));
 		
 		return mtv(axes, aab);
 	}
@@ -96,7 +98,14 @@ public class Circle extends SingleShape {
 		Set<SeparatingAxis> thatAxes = polygon.getAxes();
 
 		thisAxes.addAll(thatAxes);
-		return mtv(thisAxes, polygon);
+		Vec2f shapeMtv = mtv(thisAxes, polygon);
+		if (shapeMtv != null) {	
+			Vec2f centerDistance = polygon.center().minus(this.center());
+			if (shapeMtv.dot(centerDistance) < 0) {
+				shapeMtv = shapeMtv.smult(-1.0f);
+			}
+		}
+		return shapeMtv;
 	}
 
 	@Override

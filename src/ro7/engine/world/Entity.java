@@ -16,23 +16,6 @@ public abstract class Entity {
 	
 	public abstract void update(long nanoseconds);
 	
-	public abstract void draw(Graphics2D g);
-	
-	public void insideWorld() {
-		Vec2f min = new Vec2f(0.0f, 0.0f);
-		Vec2f max = world.getDimensions();
-		
-		if (position.x < min.x) {
-			position = new Vec2f(min.x, position.y);
-		} else if (position.x > max.x) {
-			position = new Vec2f(max.x, position.y);
-		}
-		
-		if (position.y < min.y) {
-			position = new Vec2f(position.x, min.y);
-		} else if (position.y > max.y) {
-			position = new Vec2f(position.x, max.y);
-		}
-	}
+	public abstract void draw(Graphics2D g);	
 
 }
