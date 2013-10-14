@@ -10,11 +10,11 @@ import cs195n.Vec2f;
 public class Player extends PhysicalEntity {
 	
 	private final static float MASS = 5.0f;
-	private final static float VELOCITY = 50.0f;
+	private final static float VELOCITY = 100.0f;
 	private final static Color COLOR = Color.BLUE;
 	private final static Vec2f DIMENIONS = new Vec2f(50.0f, 50.0f);
 	private final float K = 100.0f;
-	private final Vec2f JUMP_IMPULSE = new Vec2f(0.0f, -300.0f);
+	private final Vec2f JUMP_IMPULSE = new Vec2f(0.0f, -1000.0f);
 
 	public Player(GameWorld world, Vec2f position) {
 		super(world, position, MASS, new Vec2f(0.0f, 0.0f), true, new AAB(position, COLOR, COLOR, DIMENIONS));

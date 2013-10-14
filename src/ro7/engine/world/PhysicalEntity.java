@@ -5,7 +5,7 @@ import cs195n.Vec2f;
 
 public abstract class PhysicalEntity extends CollidableEntity {
 
-	private final float IMPULSE_PROPORTION = 1.0f;
+	private final float IMPULSE_PROPORTION = 10.0f;
 
 	protected float mass;
 	protected Vec2f velocity;
@@ -80,30 +80,38 @@ public abstract class PhysicalEntity extends CollidableEntity {
 				collision.otherShape.center());
 		assert mtv.dot(centerDistance) >= 0;
 
+		if (dynamic) {
+			PhysicalEntity other = (PhysicalEntity) collision.other;
+			if (other.dynamic) {
+				position = position.plus(mtv.sdiv(2.0f));
+			} else {
+				position = position.plus(mtv);
+			}
+		}
 		applyImpulse(mtv.smult(IMPULSE_PROPORTION));
 	}
 
 	protected abstract void updateShape();
-	
+
 	public void insideWorld() {
 		Vec2f min = new Vec2f(0.0f, 0.0f);
 		Vec2f max = world.getDimensions();
-		
+
 		Vec2f center = shape.center();
 		Vec2f translate;
 		if (center.x < min.x) {
-			translate = new Vec2f(min.x-center.x, 0.0f);
+			translate = new Vec2f(min.x - center.x, 0.0f);
 			position = position.plus(translate);
 		} else if (center.x > max.x) {
-			translate = new Vec2f(max.x-center.x, 0.0f);
+			translate = new Vec2f(max.x - center.x, 0.0f);
 			position = position.plus(translate);
 		}
-		
+
 		if (center.y < min.y) {
-			translate = new Vec2f(0.0f, min.y-center.y);
+			translate = new Vec2f(0.0f, min.y - center.y);
 			position = position.plus(translate);
 		} else if (center.y > max.y) {
-			translate = new Vec2f(0.0f, max.y-center.y);
+			translate = new Vec2f(0.0f, max.y - center.y);
 			position = position.plus(translate);
 		}
 	}

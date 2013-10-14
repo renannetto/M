@@ -56,6 +56,10 @@ public class SeparatingAxis {
 	public Vec2f smult(float minMagnitude) {
 		return axis.smult(minMagnitude);
 	}
+
+	public SeparatingAxis normalized() {
+		return new SeparatingAxis(axis.normalized());
+	}
 	
 	
 

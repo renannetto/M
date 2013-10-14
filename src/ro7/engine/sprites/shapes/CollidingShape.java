@@ -44,7 +44,7 @@ public abstract class CollidingShape extends Sprite {
 				float mtv1d = range1.mtv(range2);
 				if (Math.abs(mtv1d) < minMagnitude) {
 					minMagnitude = Math.abs(mtv1d);
-					mtv = axis.smult(mtv1d);
+					mtv = axis.normalized().smult(mtv1d);
 				}
 			}
 		}
