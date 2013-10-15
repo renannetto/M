@@ -10,7 +10,7 @@ import cs195n.Vec2f;
 public class HeavyObject extends PhysicalEntity {
 
 	private final static float MASS = 10.0f;
-	private final static Color COLOR = Color.BLUE;
+	private final static Color COLOR = Color.RED;
 	private final static float POLYGON_SIZE = 50.0f;
 
 	public HeavyObject(GameWorld world, Vec2f position) {

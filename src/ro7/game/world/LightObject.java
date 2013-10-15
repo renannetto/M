@@ -10,7 +10,7 @@ import cs195n.Vec2f;
 public class LightObject extends PhysicalEntity {
 	
 	private final static float MASS = 2.0f;
-	private final static Color COLOR = Color.BLUE;
+	private final static Color COLOR = Color.GREEN;
 	private final static float RADIUS = 10.0f;
 
 	public LightObject(GameWorld world, Vec2f position) {

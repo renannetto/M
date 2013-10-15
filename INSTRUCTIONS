@@ -4,4 +4,6 @@ You are the blue box
 
 Use WASD to move
 
-The circle is less massive than you, the triangle is more massive. Left-click on the screen to create a circle and right click on the screen to create a triangle
+The green circle is less massive than you, the red triangle is more massive. Left-click on the screen to create a circle and right click on the screen to create a triangle. You can have at most 15 collidable objects on the screen (including the player and the walls).
+
+To restart the game, press r.

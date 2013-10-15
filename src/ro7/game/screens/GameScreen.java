@@ -1,6 +1,7 @@
 package ro7.game.screens;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
@@ -61,6 +62,11 @@ public class GameScreen extends Screen {
 		case 68:
 			world.movePlayer(new Vec2f(1.0f, 0.0f));
 			break;
+		case 82:
+			world = new MWorld(new Vec2f(windowSize.x, windowSize.y));
+			viewport = new Viewport(new Vec2f(0.0f, 0.0f), new Vec2f(
+					windowSize.x, windowSize.y), world, new Vec2f(1.0f,
+					1.0f), new Vec2f(0.0f, 0.0f));
 		}
 		pressedKeys.add(keyCode);
 	}
@@ -78,8 +84,13 @@ public class GameScreen extends Screen {
 
 	@Override
 	public void onMousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+		int button = e.getButton();
+		Point point = e.getPoint();
+		if (button==1) {
+			world.createLightObject(new Vec2f(point.x, point.y));
+		} else if (button==3) {
+			world.createHeavyObject(new Vec2f(point.x, point.y));
+		}
 	}
 
 	@Override

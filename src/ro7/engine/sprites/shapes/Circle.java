@@ -3,6 +3,7 @@ package ro7.engine.sprites.shapes;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -46,7 +47,14 @@ public class Circle extends SingleShape {
 		Set<SeparatingAxis> axes = new HashSet<SeparatingAxis>();
 		axes.add(new SeparatingAxis(this.center().minus(circle.center())));
 		
-		return mtv(axes, circle);
+		Vec2f shapeMtv = mtv(axes, circle);
+		if (shapeMtv != null) {	
+			Vec2f centerDistance = circle.center().minus(this.center());
+			if (shapeMtv.dot(centerDistance) < 0) {
+				shapeMtv = shapeMtv.smult(-1.0f);
+			}
+		}
+		return shapeMtv;
 	}
 
 	@Override
@@ -133,8 +141,7 @@ public class Circle extends SingleShape {
 			}
 		}
 
-		SeparatingAxis axis = new SeparatingAxis(new Vec2f(closest.y,
-				-closest.x));
+		SeparatingAxis axis = new SeparatingAxis(closest);
 		axes.add(axis);
 
 		return axes;
@@ -157,6 +164,15 @@ public class Circle extends SingleShape {
 			g.setColor(fillColor);
 			g.fill(circle);
 		}
+	}
+
+	public List<Vec2f> getPoints() {
+		List<Vec2f> points = new ArrayList<Vec2f>();
+		points.add(position);
+		points.add(position.plus(0.0f, 2*radius));
+		points.add(position.plus(2*radius, 2*radius));
+		points.add(position.plus(2*radius, 0.0f));
+		return points;
 	}
 
 }

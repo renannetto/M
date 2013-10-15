@@ -13,11 +13,18 @@ public class SeparatingAxis {
 	}
 	
 	public Range project(Circle circle) {
-		Vec2f center = circle.center();
-		float radius = circle.getRadius();
-		
-		float min = center.minus(radius, radius).projectOnto(axis).mag();
-		float max = center.plus(radius, radius).projectOnto(axis).mag();
+		float min = Float.MAX_VALUE;
+		float max = -Float.MAX_VALUE;
+		List<Vec2f> points = circle.getPoints();
+		for (Vec2f point : points) {
+			float projection = point.dot(axis)/axis.mag();;
+			if (projection < min) {
+				min = projection;
+			}
+			if (projection > max) {
+				max = projection;
+			}
+		}
 		return new Range(min, max);
 	}
 	
@@ -26,7 +33,7 @@ public class SeparatingAxis {
 		float max = -Float.MAX_VALUE;
 		List<Vec2f> points = aab.getPoints();
 		for (Vec2f point : points) {
-			float projection = point.projectOnto(axis).mag();
+			float projection = point.dot(axis)/axis.mag();;
 			if (projection < min) {
 				min = projection;
 			}
@@ -42,7 +49,7 @@ public class SeparatingAxis {
 		float max = -Float.MAX_VALUE;
 		List<Vec2f> points = polygon.getPoints();
 		for (Vec2f point : points) {
-			float projection = point.projectOnto(axis).mag();
+			float projection = point.dot(axis)/axis.mag();
 			if (projection < min) {
 				min = projection;
 			}
@@ -58,6 +65,9 @@ public class SeparatingAxis {
 	}
 
 	public SeparatingAxis normalized() {
+		if (axis.isZero()) {
+			return this;
+		}
 		return new SeparatingAxis(axis.normalized());
 	}
 	

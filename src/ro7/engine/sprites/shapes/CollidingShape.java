@@ -36,6 +36,7 @@ public abstract class CollidingShape extends Sprite {
 		float minMagnitude = Float.MAX_VALUE;
 		Vec2f mtv = null;
 		for (SeparatingAxis axis : axes) {
+			axis = axis.normalized();
 			Range range1 = this.projectTo(axis);
 			Range range2 = shape.projectTo(axis);
 			if (!range1.overlaps(range2)) {
@@ -44,7 +45,7 @@ public abstract class CollidingShape extends Sprite {
 				float mtv1d = range1.mtv(range2);
 				if (Math.abs(mtv1d) < minMagnitude) {
 					minMagnitude = Math.abs(mtv1d);
-					mtv = axis.normalized().smult(mtv1d);
+					mtv = axis.smult(mtv1d);
 				}
 			}
 		}

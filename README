@@ -11,3 +11,7 @@ Game requirements:
  - There are black walls around all the world, they don't move and no object can pass through it
  - There are two dynamic objects which are not the player. The circle is less massive and the triangle is more massive
  - There is one box (player), one circle (less massive) and one polygon (more massive), so all shape types are being used on collisions
+
+Known bugs: no known bugs
+
+Approximate hours: 15 hours

@@ -4,11 +4,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import cs195n.Vec2f;
 import ro7.engine.world.CollidableEntity;
 import ro7.engine.world.Collision;
 import ro7.engine.world.GameWorld;
 import ro7.engine.world.PhysicalEntity;
+import cs195n.Vec2f;
 
 public class MWorld extends GameWorld {
 
@@ -49,7 +49,7 @@ public class MWorld extends GameWorld {
 		physEntities.add(player);
 
 		HeavyObject heavy = new HeavyObject(this, new Vec2f(
-				3 * dimensions.x / 4.0f, dimensions.y / 2.0f));
+				3 * dimensions.x / 4.0f, dimensions.y - WALL_SIZE + 10.0f));
 		collidables.add(heavy);
 		physEntities.add(heavy);
 
@@ -77,6 +77,37 @@ public class MWorld extends GameWorld {
 		if (collisions.get(player).validCollision()) {
 			player.jump();
 		}
+	}
+
+	public void createLightObject(Vec2f position) {
+		if (collidables.size() < 15) {
+			LightObject object = new LightObject(this, position);
+			if (!collides(object)) {
+				collidables.add(object);
+				physEntities.add(object);
+			}
+		}
+	}
+
+	public void createHeavyObject(Vec2f position) {
+		if (collidables.size() < 15) {
+			HeavyObject object = new HeavyObject(this, position);
+			if (!collides(object)) {
+				collidables.add(object);
+				physEntities.add(object);
+			}
+		}
+	}
+
+	private boolean collides(CollidableEntity collidable) {
+		for (CollidableEntity entity : collidables) {
+			Map<CollidableEntity, Collision> collisions = entity
+					.collides(collidable);
+			if (collisions.get(collidable).validCollision()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
