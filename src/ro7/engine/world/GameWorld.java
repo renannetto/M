@@ -3,7 +3,6 @@ package ro7.engine.world;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import cs195n.Vec2f;
 
@@ -45,14 +44,9 @@ public abstract class GameWorld {
 		for (CollidableEntity collidableA : collidables) {
 			for (CollidableEntity collidableB : collidables) {
 				if (!collidableA.equals(collidableB)) {
-					Map<CollidableEntity, Collision> collisions = collidableA.collides(collidableB);
-					Collision collisionA = collisions.get(collidableA);
-					Collision collisionB = collisions.get(collidableB);
-					if (collisionA.validCollision()) {
-						collidableA.onCollision(collisionA);
-					}
-					if (collisionB.validCollision()) {
-						collidableB.onCollision(collisionB);
+					Collision collision = collidableA.collides(collidableB);
+					if (collision.validCollision()) {
+						collidableA.onCollision(collision);
 					}
 				}
 			}

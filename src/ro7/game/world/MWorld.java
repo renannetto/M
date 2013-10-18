@@ -1,7 +1,6 @@
 package ro7.game.world;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import ro7.engine.world.CollidableEntity;
@@ -73,8 +72,8 @@ public class MWorld extends GameWorld {
 	}
 
 	public void jumpPlayer() {
-		Map<CollidableEntity, Collision> collisions = player.collides(floor);
-		if (collisions.get(player).validCollision()) {
+		Collision collision = player.collides(floor);
+		if (collision.validCollision()) {
 			player.jump();
 		}
 	}
@@ -101,9 +100,9 @@ public class MWorld extends GameWorld {
 
 	private boolean collides(CollidableEntity collidable) {
 		for (CollidableEntity entity : collidables) {
-			Map<CollidableEntity, Collision> collisions = entity
+			Collision collision = entity
 					.collides(collidable);
-			if (collisions.get(collidable).validCollision()) {
+			if (collision.validCollision()) {
 				return true;
 			}
 		}
