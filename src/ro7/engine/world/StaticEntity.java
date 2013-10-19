@@ -24,24 +24,34 @@ public abstract class StaticEntity extends PhysicalEntity {
 		assert mtv.dot(centerDistance) >= 0;
 
 		PhysicalEntity other = (PhysicalEntity) collision.other;
-		other.onCollisionStatic(collision);
+		other.onCollisionStatic(new Collision(this, mtv.smult(-1.0f), other.shape, this.shape));
 	}
 	
 	@Override
 	public void onCollisionDynamic(Collision collision) {
 		Vec2f mtv = collision.mtv;
+		if (mtv.mag2() == 0) {
+			return;
+		}
 		PhysicalEntity other = (PhysicalEntity) collision.other;
 		other.position = other.position.plus(mtv.smult(-1.0f));
-		applyImpulse(mtv.smult(IMPULSE_PROPORTION));
-		other.applyImpulse(mtv.smult(-1.0f).smult(IMPULSE_PROPORTION));
+		
+		mtv = mtv.normalized();
+		
+		float cor = this.cor(other);
+		float ua = this.velocity.dot(mtv);
+		float ub = other.velocity.dot(mtv);
+		float mb = other.mass;
+		
+		float impulse = mb*(1+cor)*(ub-ua);
+		
+		applyImpulse(mtv.smult(impulse/2.0f));
+		other.applyImpulse(mtv.smult(-impulse/2.0f));
 	}
 	
 	@Override
 	public void onCollisionStatic(Collision collision) {
-		Vec2f mtv = collision.mtv;
-		PhysicalEntity other = (PhysicalEntity) collision.other;
-		applyImpulse(mtv.smult(IMPULSE_PROPORTION));
-		other.applyImpulse(mtv.smult(-1.0f).smult(IMPULSE_PROPORTION));
+		
 	}
 
 }

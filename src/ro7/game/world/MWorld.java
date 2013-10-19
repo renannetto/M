@@ -19,6 +19,8 @@ public class MWorld extends GameWorld {
 	Set<PhysicalEntity> physEntities;
 
 	Wall floor;
+	
+	Set<Bullet> removeShoots;
 
 	public MWorld(Vec2f dimensions) {
 		super(dimensions);
@@ -48,7 +50,7 @@ public class MWorld extends GameWorld {
 		physEntities.add(player);
 
 		HeavyObject heavy = new HeavyObject(this, new Vec2f(
-				3 * dimensions.x / 4.0f, dimensions.y - WALL_SIZE + 10.0f));
+				3 * dimensions.x / 4.0f, dimensions.y / 2.0f));
 		collidables.add(heavy);
 		physEntities.add(heavy);
 
@@ -56,6 +58,8 @@ public class MWorld extends GameWorld {
 				dimensions.x / 4.0f, dimensions.y / 2.0f));
 		collidables.add(light);
 		physEntities.add(light);
+		
+		removeShoots = new HashSet<Bullet>();
 	}
 
 	@Override
@@ -64,6 +68,9 @@ public class MWorld extends GameWorld {
 
 		for (PhysicalEntity entity : physEntities) {
 			entity.applyGravity(GRAVITY);
+		}
+		for (Bullet bullet : removeShoots) {
+			rays.remove(bullet);
 		}
 	}
 
@@ -107,6 +114,15 @@ public class MWorld extends GameWorld {
 			}
 		}
 		return false;
+	}
+
+	public void shoot() {
+		Bullet bullet = player.shoot();
+		rays.add(bullet);
+	}
+
+	public void removeShoot(Bullet bullet) {
+		removeShoots.add(bullet);
 	}
 
 }

@@ -11,11 +11,13 @@ public abstract class GameWorld {
 	protected Vec2f dimensions;
 	protected List<Entity> entities;
 	protected List<CollidableEntity> collidables;
+	protected List<Ray> rays;
 
 	protected GameWorld(Vec2f dimensions) {
 		this.dimensions = dimensions;
 		entities = new ArrayList<Entity>();
 		collidables = new ArrayList<CollidableEntity>();
+		rays = new ArrayList<Ray>();
 	}
 
 	/**
@@ -49,6 +51,24 @@ public abstract class GameWorld {
 						collidableA.onCollision(collision);
 					}
 				}
+			}
+		}
+		for (Ray ray : rays) {
+			RayCollision closest = null;
+			float minDistance = Float.MAX_VALUE;
+			for (CollidableEntity other : collidables) {
+				RayCollision collision = other.collidesRay(ray);
+				if (collision.validCollision()) {
+					Vec2f point = collision.point;
+					float distance = ray.dist2(point);
+					if (distance < minDistance) {
+						minDistance = distance;
+						closest = collision;
+					}
+				}
+			}
+			if (closest != null) {
+				ray.onCollision(closest);
 			}
 		}
 	}

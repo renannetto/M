@@ -19,6 +19,11 @@ public abstract class CollidableEntity extends Entity {
 		return new Collision(other, mtv, this.shape, other.shape);
 	}
 	
+	public RayCollision collidesRay(Ray ray) {
+		Vec2f point = this.shape.collidesRay(ray);
+		return new RayCollision(this, point, this.shape);
+	}
+	
 	public abstract void onCollision(Collision collision);
 	
 	@Override

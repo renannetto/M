@@ -5,8 +5,6 @@ import cs195n.Vec2f;
 
 public abstract class PhysicalEntity extends CollidableEntity {
 
-	protected final float IMPULSE_PROPORTION = 10.0f;
-
 	protected float mass;
 	protected Vec2f velocity;
 	protected Vec2f impulse;

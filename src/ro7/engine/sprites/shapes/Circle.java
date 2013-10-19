@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import ro7.engine.world.Ray;
 import cs195n.Vec2f;
 
 /**
@@ -153,6 +154,11 @@ public class Circle extends SingleShape {
 	}
 	
 	@Override
+	public Vec2f collidesRay(Ray ray) {
+		return ray.collidesCircle(this);
+	}
+	
+	@Override
 	public void draw(Graphics2D g) {
 		Ellipse2D circle = new Ellipse2D.Float(position.x, position.y,
 				2.0f * radius, 2.0f * radius);
@@ -173,6 +179,11 @@ public class Circle extends SingleShape {
 		points.add(position.plus(2*radius, 2*radius));
 		points.add(position.plus(2*radius, 0.0f));
 		return points;
+	}
+
+	public boolean inside(Vec2f position) {
+		float distance = position.dist2(this.center());
+		return distance < (radius*radius);
 	}
 
 }

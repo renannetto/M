@@ -51,6 +51,9 @@ public class GameScreen extends Screen {
 	public void onKeyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 		switch (keyCode) {
+		case 32:
+			world.shoot();
+			break;
 		case 65:
 			world.movePlayer(new Vec2f(-1.0f, 0.0f));
 			break;

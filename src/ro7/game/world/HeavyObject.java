@@ -3,11 +3,10 @@ package ro7.game.world;
 import java.awt.Color;
 
 import ro7.engine.sprites.shapes.Polygon;
-import ro7.engine.world.DynamicEntity;
 import ro7.engine.world.GameWorld;
 import cs195n.Vec2f;
 
-public class HeavyObject extends DynamicEntity {
+public class HeavyObject extends MDynamicEntity {
 
 	private final static float MASS = 10.0f;
 	private final static float RESTITUTION = 0.5f;

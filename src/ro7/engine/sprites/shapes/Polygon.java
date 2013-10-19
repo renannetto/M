@@ -3,23 +3,17 @@ package ro7.engine.sprites.shapes;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import ro7.engine.world.Ray;
 import cs195n.Vec2f;
 
-public class Polygon extends SingleShape {
-	
-	private final List<Vec2f> points;
+public class Polygon extends EdgeShape {
 
 	public Polygon(Vec2f position, Color fillColor, Vec2f... points) {
-		super(position, fillColor, fillColor);
-		this.points = new ArrayList<Vec2f>();
-		for (Vec2f point : points) {
-			this.points.add(point);
-		}
+		super(position, fillColor, fillColor, points);
 	}
 
 	@Override
@@ -108,6 +102,11 @@ public class Polygon extends SingleShape {
 		}
 		return null;
 	}
+	
+	@Override
+	public Vec2f collidesRay(Ray ray) {
+		return ray.collidesPolygon(this);
+	}
 
 	@Override
 	public void draw(Graphics2D g) {
@@ -118,10 +117,6 @@ public class Polygon extends SingleShape {
 			path.lineTo(point.x, point.y);
 		}
 		g.fill(path);
-	}
-
-	public List<Vec2f> getPoints() {
-		return points;
 	}
 
 	@Override

@@ -3,11 +3,10 @@ package ro7.game.world;
 import java.awt.Color;
 
 import ro7.engine.sprites.shapes.Circle;
-import ro7.engine.world.DynamicEntity;
 import ro7.engine.world.GameWorld;
 import cs195n.Vec2f;
 
-public class LightObject extends DynamicEntity {
+public class LightObject extends MDynamicEntity {
 	
 	private final static float MASS = 2.0f;
 	private final static float RESTITUTION = 1.0f;

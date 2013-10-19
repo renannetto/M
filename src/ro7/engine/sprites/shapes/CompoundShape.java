@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import ro7.engine.world.Ray;
 import cs195n.Vec2f;
 
 public class CompoundShape extends CollidingShape {
@@ -19,7 +20,7 @@ public class CompoundShape extends CollidingShape {
 			this.shapes.add(shape);
 		}
 	}
-	
+
 	public List<CollidingShape> getShapes() {
 		return new ArrayList<CollidingShape>(shapes);
 	}
@@ -50,7 +51,7 @@ public class CompoundShape extends CollidingShape {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public Vec2f collidesPolygon(Polygon polygon) {
 		for (CollidingShape shape : shapes) {
@@ -71,6 +72,25 @@ public class CompoundShape extends CollidingShape {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public Vec2f collidesRay(Ray ray) {
+		Vec2f closest = null;
+		for (CollidingShape shape : shapes) {
+			Vec2f point = shape.collidesRay(ray);
+			if (closest == null) {
+				closest = point;
+			} else {
+				if (point != null) {
+					float distance = ray.dist2(point);
+					if (distance < ray.dist2(closest)) {
+						closest = point;
+					}
+				}
+			}
+		}
+		return closest;
 	}
 
 	@Override

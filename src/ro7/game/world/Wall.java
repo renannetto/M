@@ -4,10 +4,9 @@ import java.awt.Color;
 
 import ro7.engine.sprites.shapes.AAB;
 import ro7.engine.world.GameWorld;
-import ro7.engine.world.StaticEntity;
 import cs195n.Vec2f;
 
-public class Wall extends StaticEntity {
+public class Wall extends MStaticEntity {
 	
 	private static final float MASS = Float.MAX_VALUE;
 	private static final float RESTITUTION = 0.0f;

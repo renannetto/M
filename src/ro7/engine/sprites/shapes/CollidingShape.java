@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.Set;
 
 import ro7.engine.sprites.Sprite;
+import ro7.engine.world.Ray;
 import cs195n.Vec2f;
 
 public abstract class CollidingShape extends Sprite {
@@ -21,6 +22,8 @@ public abstract class CollidingShape extends Sprite {
 	public abstract Vec2f collidesPolygon(Polygon polygon);
 	
 	public abstract Vec2f collidesCompoundShape(CompoundShape compound);
+	
+	public abstract Vec2f collidesRay(Ray ray);
 	
 	public Vec2f getPosition() {
 		return position;

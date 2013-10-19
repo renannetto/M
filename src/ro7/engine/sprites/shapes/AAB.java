@@ -4,20 +4,22 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import ro7.engine.world.Ray;
 import cs195n.Vec2f;
 
-public class AAB extends SingleShape {
+public class AAB extends EdgeShape {
 
 	private Vec2f dimensions;
 
 	public AAB(Vec2f position, Color borderColor, Color fillColor,
 			Vec2f dimensions) {
-		super(position, borderColor, fillColor);
+		super(position, borderColor, fillColor, position, position.plus(0.0f,
+				dimensions.y), position.plus(dimensions.x, dimensions.y),
+				position.plus(dimensions.x, 0.0f));
 		this.dimensions = dimensions;
 	}
 
@@ -64,10 +66,11 @@ public class AAB extends SingleShape {
 		}
 
 		Vec2f circleCenter = circle.center();
-		Vec2f dist = new Vec2f(Math.abs(point.x-circleCenter.x), Math.abs(point.y-circleCenter.y));
+		Vec2f dist = new Vec2f(Math.abs(point.x - circleCenter.x),
+				Math.abs(point.y - circleCenter.y));
 		Set<SeparatingAxis> axes = new HashSet<SeparatingAxis>();
 		axes.add(new SeparatingAxis(dist));
-		
+
 		return mtv(axes, circle);
 	}
 
@@ -82,7 +85,7 @@ public class AAB extends SingleShape {
 				&& minThis.y <= maxAAB.y && maxThis.y >= minAAB.y)) {
 			return null;
 		}
-		
+
 		Set<SeparatingAxis> thisAxes = this.getAxes();
 
 		return mtv(thisAxes, aab);
@@ -127,6 +130,11 @@ public class AAB extends SingleShape {
 	public Range projectTo(SeparatingAxis axis) {
 		return axis.project(this);
 	}
+	
+	@Override
+	public Vec2f collidesRay(Ray ray) {
+		return ray.collidesAAB(this);
+	}
 
 	@Override
 	public void draw(Graphics2D g) {
@@ -149,15 +157,6 @@ public class AAB extends SingleShape {
 	public Shape getShape() {
 		return new Rectangle2D.Float(position.x, position.y, dimensions.x,
 				dimensions.y);
-	}
-
-	public List<Vec2f> getPoints() {
-		List<Vec2f> points = new ArrayList<Vec2f>();
-		points.add(position);
-		points.add(position.plus(0.0f, dimensions.y));
-		points.add(position.plus(dimensions.x, dimensions.y));
-		points.add(position.plus(dimensions.x, 0.0f));
-		return points;
 	}
 
 	@Override
