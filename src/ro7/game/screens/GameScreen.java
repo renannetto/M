@@ -57,6 +57,8 @@ public class GameScreen extends Screen {
 		case 65:
 			world.movePlayer(new Vec2f(-1.0f, 0.0f));
 			break;
+		case 71:
+			world.tossGrenade();
 		case 87:
 			if (!pressedKeys.contains(keyCode)) {
 				world.jumpPlayer();

@@ -1,9 +1,11 @@
-M 1 instructions
+M 2 instructions
 
 You are the blue box
 
-Use WASD to move
+Use W to move left and D to move right.
 
 The green circle is less massive than you, the red triangle is more massive. Left-click on the screen to create a circle and right click on the screen to create a triangle. You can have at most 15 collidable objects on the screen (including the player and the walls).
+
+Press space to shoot and G to toss a grenade. The shoots can't hit you, but the grenade explosion can.
 
 To restart the game, press r.

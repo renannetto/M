@@ -6,8 +6,8 @@ import cs195n.Vec2f;
 public abstract class StaticEntity extends PhysicalEntity {
 
 	protected StaticEntity(GameWorld world, Vec2f position, float mass,
-			Vec2f velocity, float restitution, CollidingShape shape) {
-		super(world, position, mass, velocity, restitution, shape);
+			Vec2f velocity, float restitution, int groupIndex, CollidingShape shape) {
+		super(world, position, mass, velocity, restitution, groupIndex, shape);
 	}
 
 	@Override

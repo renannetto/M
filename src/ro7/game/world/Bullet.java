@@ -8,9 +8,10 @@ import cs195n.Vec2f;
 public class Bullet extends Ray {
 	
 	private final float SHOOT_IMPULSE = 500;
+	private static final int GROUP = -1;
 
 	public Bullet(GameWorld world, Vec2f position, Vec2f direction) {
-		super(world, position, direction);
+		super(world, position, GROUP, direction);
 	}
 
 	@Override

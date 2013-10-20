@@ -12,8 +12,8 @@ public abstract class PhysicalEntity extends CollidableEntity {
 	protected float restitution;
 
 	protected PhysicalEntity(GameWorld world, Vec2f position, float mass,
-			Vec2f velocity, float restitution, CollidingShape shape) {
-		super(world, position, shape);
+			Vec2f velocity, float restitution, int groupIndex, CollidingShape shape) {
+		super(world, position, groupIndex, shape);
 		this.mass = mass;
 		this.velocity = velocity;
 		this.force = new Vec2f(0.0f, 0.0f);
@@ -22,8 +22,8 @@ public abstract class PhysicalEntity extends CollidableEntity {
 	}
 
 	protected PhysicalEntity(GameWorld world, Vec2f position, float mass,
-			float velocity, float restitution, CollidingShape shape) {
-		super(world, position, shape);
+			float velocity, float restitution, int groupIndex, CollidingShape shape) {
+		super(world, position, groupIndex, shape);
 		this.mass = mass;
 		this.velocity = randomDirection().smult(velocity);
 		this.force = new Vec2f(0.0f, 0.0f);

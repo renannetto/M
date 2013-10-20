@@ -1,17 +1,14 @@
-M 1 README
+M 2 README
 
 Engine requirements:
- - Integration: the PhysicalEntity class on ro7.engine.world updates its velocity and position by using sympletic Euler integration
- - Force and impulse: the PhysicalEntity class has methods to apply force and impulse. Both are used when updating the velocity and are discarded after that
- - MTV: the collision methods of the shapes in ro7.engine.sprites.shapes now return a Vec2f instead of a boolean. This Vec2f is null when there is no collision, otherwise it represents the MTV. For compound shapes it is just a non null Vec2f, but not a correct MTV.
- - Collision response: the onCollision method on PhysicalEntity does the collision response. It will translate the Entity according to the MTV and apply an impulse on it.
+ - Restitution: each PhysicalEntity in ro7.engine.world now has a restitution attribute. There is also two subclasses DynamicEntity and StaticEntity which extends PhysicalEntity and deals collisions in different ways. Both will calculate the impulse using the appropriate restitution formula and apply it on both shapes.
+ - Raycasting: the class Ray in ro7.engine.world can check if it is colliding with Circles, AABs and Polygons and returns the point of collision. The CollidableEntity class in the same package contains a collidesRay method which will get this point and return a RayCollision object, with information about the collision. Finally, the GameWorld class in the same package will iterate through all the rays on its update method to find the closest intersection point and apply the collision on it.
 
 Game requirements:
- - The player controls the blue box, which can run and jump when it is on the floor
- - There are black walls around all the world, they don't move and no object can pass through it
- - There are two dynamic objects which are not the player. The circle is less massive and the triangle is more massive
- - There is one box (player), one circle (less massive) and one polygon (more massive), so all shape types are being used on collisions
+ - The circles are completely ellastic (restitution = 1), the player and the walls are completely inelastic (restitution = 0) and the triangle has a restitution of 0.5. So, when anything collides with the walls or the player is a completely inelastic collision, when two circles collide it is an ellastic collision and when a circle or a triangle collides with a triangle it is an inelastic collision.
+ - The player can fire bullets, which are represented as rays. The player can also toss grenades, which emit rays in different directions.
+ - The player can jump only if it is above a solid object. This is verified in the jump method on MWorld, which checks if it has a collision with a mtv pointing to up.
 
-Known bugs: no known bugs
+Known bugs: sometimes when the player toss a greande it collides and push him back
 
-Approximate hours: 15 hours
+Approximate hours: 12 hours

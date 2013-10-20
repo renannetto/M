@@ -5,12 +5,12 @@ import java.awt.Graphics2D;
 import ro7.engine.sprites.shapes.CollidingShape;
 import cs195n.Vec2f;
 
-public abstract class CollidableEntity extends Entity {
+public abstract class CollidableEntity extends GroupEntity {
 
 	protected CollidingShape shape;
 	
-	protected CollidableEntity(GameWorld world, Vec2f position, CollidingShape shape) {
-		super(world, position);
+	protected CollidableEntity(GameWorld world, Vec2f position, int groupIndex, CollidingShape shape) {
+		super(world, position, groupIndex);
 		this.shape = shape;
 	}
 	

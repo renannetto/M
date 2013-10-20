@@ -10,11 +10,12 @@ public class LightObject extends MDynamicEntity {
 	
 	private final static float MASS = 2.0f;
 	private final static float RESTITUTION = 1.0f;
+	private static final int GROUP = 1;
 	private final static Color COLOR = Color.GREEN;
-	private final static float RADIUS = 10.0f;
+	private final static float RADIUS = 20.0f;
 
 	public LightObject(GameWorld world, Vec2f position) {
-		super(world, position, MASS, new Vec2f(0.0f, 0.0f), RESTITUTION, new Circle(position, COLOR, COLOR, RADIUS));
+		super(world, position, MASS, new Vec2f(0.0f, 0.0f), RESTITUTION, GROUP, new Circle(position, COLOR, COLOR, RADIUS));
 	}
 
 	@Override

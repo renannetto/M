@@ -8,8 +8,8 @@ import ro7.engine.world.StaticEntity;
 public abstract class MStaticEntity extends StaticEntity implements MEntity {
 
 	protected MStaticEntity(GameWorld world, Vec2f position, float mass,
-			Vec2f velocity, float restitution, CollidingShape shape) {
-		super(world, position, mass, velocity, restitution, shape);
+			Vec2f velocity, float restitution, int groupIndex, CollidingShape shape) {
+		super(world, position, mass, velocity, restitution, groupIndex, shape);
 	}
 	
 	public void shooted(Vec2f impulse) {

@@ -21,6 +21,7 @@ public class MWorld extends GameWorld {
 	Wall floor;
 	
 	Set<Bullet> removeShoots;
+	Set<Grenade> removeGrenades;
 
 	public MWorld(Vec2f dimensions) {
 		super(dimensions);
@@ -60,6 +61,7 @@ public class MWorld extends GameWorld {
 		physEntities.add(light);
 		
 		removeShoots = new HashSet<Bullet>();
+		removeGrenades = new HashSet<Grenade>();
 	}
 
 	@Override
@@ -69,9 +71,17 @@ public class MWorld extends GameWorld {
 		for (PhysicalEntity entity : physEntities) {
 			entity.applyGravity(GRAVITY);
 		}
+		
 		for (Bullet bullet : removeShoots) {
 			rays.remove(bullet);
 		}
+		removeShoots.clear();
+		
+		for (Grenade grenade : removeGrenades) {
+			physEntities.remove(grenade);
+			collidables.remove(collidables.indexOf(grenade));
+		}
+		removeGrenades.clear();
 	}
 
 	public void movePlayer(Vec2f direction) {
@@ -79,9 +89,13 @@ public class MWorld extends GameWorld {
 	}
 
 	public void jumpPlayer() {
-		Collision collision = player.collides(floor);
-		if (collision.validCollision()) {
-			player.jump();
+		for (CollidableEntity other : collidables) {
+			if (!other.equals(player)) {
+				Collision collision = player.collides(other);
+				if (collision.validCollision() && collision.mtv.y < 0) {
+					player.jump();
+				}
+			}
 		}
 	}
 
@@ -123,6 +137,16 @@ public class MWorld extends GameWorld {
 
 	public void removeShoot(Bullet bullet) {
 		removeShoots.add(bullet);
+	}
+	
+	public void removeGrenade(Grenade grenade) {
+		removeGrenades.add(grenade);
+	}
+
+	public void tossGrenade() {
+		Grenade grenade = player.tossGrenade();
+		physEntities.add(grenade);
+		collidables.add(grenade);
 	}
 
 }

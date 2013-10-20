@@ -6,8 +6,8 @@ import cs195n.Vec2f;
 public abstract class DynamicEntity extends PhysicalEntity {
 
 	protected DynamicEntity(GameWorld world, Vec2f position, float mass,
-			Vec2f velocity, float restitution, CollidingShape shape) {
-		super(world, position, mass, velocity, restitution, shape);
+			Vec2f velocity, float restitution, int groupIndex, CollidingShape shape) {
+		super(world, position, mass, velocity, restitution, groupIndex, shape);
 	}
 
 	@Override
@@ -70,8 +70,8 @@ public abstract class DynamicEntity extends PhysicalEntity {
 
 		float impulse = ma * (1 + cor) * (ub - ua);
 
-		applyImpulse(mtv.smult(impulse/2.0f));
-		other.applyImpulse(mtv.smult(-impulse/2.0f));
+		applyImpulse(mtv.smult(impulse));
+		other.applyImpulse(mtv.smult(-impulse));
 	}
 
 }
