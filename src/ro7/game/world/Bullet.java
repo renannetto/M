@@ -1,8 +1,8 @@
 package ro7.game.world;
 
 import ro7.engine.world.GameWorld;
-import ro7.engine.world.Ray;
 import ro7.engine.world.RayCollision;
+import ro7.engine.world.entities.Ray;
 import cs195n.Vec2f;
 
 public class Bullet extends Ray {

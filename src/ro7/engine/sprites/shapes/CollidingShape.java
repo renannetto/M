@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.Set;
 
 import ro7.engine.sprites.Sprite;
-import ro7.engine.world.Ray;
+import ro7.engine.world.entities.Ray;
 import cs195n.Vec2f;
 
 public abstract class CollidingShape extends Sprite {

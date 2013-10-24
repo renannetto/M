@@ -3,16 +3,16 @@ package ro7.game.world;
 import java.util.HashSet;
 import java.util.Set;
 
-import ro7.engine.world.CollidableEntity;
 import ro7.engine.world.Collision;
 import ro7.engine.world.GameWorld;
-import ro7.engine.world.PhysicalEntity;
+import ro7.engine.world.entities.CollidableEntity;
+import ro7.engine.world.entities.PhysicalEntity;
 import cs195n.Vec2f;
 
 public class MWorld extends GameWorld {
 
 	private final float WALL_SIZE = 50.0f;
-	private final Vec2f GRAVITY = new Vec2f(0.0f, 100.0f);
+	private final Vec2f GRAVITY = new Vec2f(0.0f, 300.0f);
 
 	private Player player;
 

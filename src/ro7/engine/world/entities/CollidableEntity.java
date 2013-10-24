@@ -1,8 +1,11 @@
-package ro7.engine.world;
+package ro7.engine.world.entities;
 
 import java.awt.Graphics2D;
 
 import ro7.engine.sprites.shapes.CollidingShape;
+import ro7.engine.world.Collision;
+import ro7.engine.world.GameWorld;
+import ro7.engine.world.RayCollision;
 import cs195n.Vec2f;
 
 public abstract class CollidableEntity extends GroupEntity {

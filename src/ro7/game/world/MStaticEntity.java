@@ -3,7 +3,7 @@ package ro7.game.world;
 import cs195n.Vec2f;
 import ro7.engine.sprites.shapes.CollidingShape;
 import ro7.engine.world.GameWorld;
-import ro7.engine.world.StaticEntity;
+import ro7.engine.world.entities.StaticEntity;
 
 public abstract class MStaticEntity extends StaticEntity implements MEntity {
 

@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import ro7.engine.world.Ray;
+import ro7.engine.world.entities.Ray;
 import cs195n.Vec2f;
 
 public class CompoundShape extends CollidingShape {

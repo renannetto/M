@@ -2,8 +2,8 @@ package ro7.game.world;
 
 import cs195n.Vec2f;
 import ro7.engine.world.GameWorld;
-import ro7.engine.world.Ray;
 import ro7.engine.world.RayCollision;
+import ro7.engine.world.entities.Ray;
 
 public class GrenadeRay extends Ray {
 	

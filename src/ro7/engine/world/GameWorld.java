@@ -6,6 +6,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import ro7.engine.world.entities.CollidableEntity;
+import ro7.engine.world.entities.Entity;
+import ro7.engine.world.entities.Ray;
 import cs195n.Vec2f;
 
 public abstract class GameWorld {

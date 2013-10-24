@@ -1,6 +1,7 @@
 package ro7.engine.world;
 
 import ro7.engine.sprites.shapes.CollidingShape;
+import ro7.engine.world.entities.CollidableEntity;
 import cs195n.Vec2f;
 
 public class RayCollision {

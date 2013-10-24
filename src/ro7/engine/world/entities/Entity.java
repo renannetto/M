@@ -1,7 +1,8 @@
-package ro7.engine.world;
+package ro7.engine.world.entities;
 
 import java.awt.Graphics2D;
 
+import ro7.engine.world.GameWorld;
 import cs195n.Vec2f;
 
 public abstract class Entity {

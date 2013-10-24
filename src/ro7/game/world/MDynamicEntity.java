@@ -1,8 +1,8 @@
 package ro7.game.world;
 
 import ro7.engine.sprites.shapes.CollidingShape;
-import ro7.engine.world.DynamicEntity;
 import ro7.engine.world.GameWorld;
+import ro7.engine.world.entities.DynamicEntity;
 import cs195n.Vec2f;
 
 public abstract class MDynamicEntity extends DynamicEntity implements MEntity {

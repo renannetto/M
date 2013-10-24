@@ -2,6 +2,7 @@ package ro7.engine.world;
 
 import cs195n.Vec2f;
 import ro7.engine.sprites.shapes.CollidingShape;
+import ro7.engine.world.entities.CollidableEntity;
 
 public class Collision {
 

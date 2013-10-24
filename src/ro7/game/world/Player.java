@@ -9,13 +9,13 @@ import cs195n.Vec2f;
 public class Player extends MDynamicEntity {
 
 	private final static float MASS = 5.0f;
-	private final static float VELOCITY = 100.0f;
+	private final static float VELOCITY = 300.0f;
 	private final static float RESTITUTION = 0.0f;
 	private static final int GROUP = -1;
 	private final static Color COLOR = Color.BLUE;
 	private final static Vec2f DIMENSIONS = new Vec2f(50.0f, 50.0f);
 	private final float K = 100.0f;
-	private final Vec2f JUMP_IMPULSE = new Vec2f(0.0f, -700.0f);
+	private final Vec2f JUMP_IMPULSE = new Vec2f(0.0f, -1000.0f);
 
 	public Player(GameWorld world, Vec2f position) {
 		super(world, position, MASS, new Vec2f(0.0f, 0.0f), RESTITUTION, GROUP, 

@@ -1,6 +1,8 @@
-package ro7.engine.world;
+package ro7.engine.world.entities;
 
 import ro7.engine.sprites.shapes.CollidingShape;
+import ro7.engine.world.Collision;
+import ro7.engine.world.GameWorld;
 import cs195n.Vec2f;
 
 public abstract class PhysicalEntity extends CollidableEntity {

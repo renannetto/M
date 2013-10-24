@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import ro7.engine.world.Ray;
+import ro7.engine.world.entities.Ray;
 import cs195n.Vec2f;
 
 /**

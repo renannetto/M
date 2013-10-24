@@ -1,4 +1,4 @@
-package ro7.engine.world;
+package ro7.engine.world.entities;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -8,6 +8,9 @@ import ro7.engine.sprites.Line;
 import ro7.engine.sprites.shapes.AAB;
 import ro7.engine.sprites.shapes.Circle;
 import ro7.engine.sprites.shapes.Polygon;
+import ro7.engine.world.Edge;
+import ro7.engine.world.GameWorld;
+import ro7.engine.world.RayCollision;
 import cs195n.Vec2f;
 
 public abstract class Ray extends GroupEntity {
