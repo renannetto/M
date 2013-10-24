@@ -42,13 +42,8 @@ public class Player extends MDynamicEntity {
 		applyImpulse(JUMP_IMPULSE);
 	}
 
-	public Bullet shoot() {
-		Vec2f direction = velocity.projectOnto(new Vec2f(1.0f, 0.0f));
-		if (direction.mag2() == 0) {
-			direction = new Vec2f(1.0f, 0.0f);
-		} else {
-			direction = direction.normalized();
-		}
+	public Bullet shoot(Vec2f point) {
+		Vec2f direction = point.minus(position).normalized();
 		
 		Vec2f bulletPosition = shape.center();
 		if (direction.x > 0) {
@@ -63,9 +58,9 @@ public class Player extends MDynamicEntity {
 		Vec2f direction = new Vec2f(velocity.projectOnto(new Vec2f(1.0f, -1.0f)).x, -1.0f).normalized();
 		Vec2f grenadePosition;
 		if (direction.x > 0) {
-			grenadePosition = position.plus(DIMENSIONS.x, -10.0f);
+			grenadePosition = position.plus(DIMENSIONS.x+10.0f, -10.0f);
 		} else {
-			grenadePosition = position.plus(0.0f, -10.0f);
+			grenadePosition = position.plus(-10.0f, -10.0f);
 		}
 		return new Grenade(world, grenadePosition, direction);
 	}

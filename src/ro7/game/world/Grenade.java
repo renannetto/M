@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ro7.engine.sprites.shapes.Circle;
+import ro7.engine.world.Collision;
 import ro7.engine.world.GameWorld;
 import ro7.engine.world.RayCollision;
 import cs195n.Vec2f;
@@ -78,6 +79,11 @@ public class Grenade extends MDynamicEntity {
 	@Override
 	protected void updateShape() {
 		shape = new Circle(position, COLOR, COLOR, GRENADE_RADIUS);
+	}
+	
+	@Override
+	public void onCollision(Collision collision) {
+		explode();
 	}
 
 }

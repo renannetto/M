@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Set;
 
+import ro7.engine.sprites.Line;
 import ro7.engine.sprites.shapes.AAB;
 import ro7.engine.sprites.shapes.Circle;
 import ro7.engine.sprites.shapes.Polygon;
@@ -11,12 +12,11 @@ import cs195n.Vec2f;
 
 public abstract class Ray extends GroupEntity {
 
-	private final float RAY_SIZE = 2.0f;
 	private final Color COLOR = Color.RED;
 	private final float TIME_LIMIT = 0.1f;
 
 	protected Vec2f direction;
-	protected AAB shape;
+	protected Line sprite;
 	protected float elapsedTime;
 
 	protected Ray(GameWorld world, Vec2f position, int groupIndex,
@@ -35,17 +35,12 @@ public abstract class Ray extends GroupEntity {
 	}
 
 	public void updateShape(Vec2f intersection) {
-		float length = intersection.dist(position);
-		if (direction.dot(position) > 0) {
-			shape = new AAB(position, COLOR, COLOR, new Vec2f(length, RAY_SIZE));
-		} else {
-			shape = new AAB(intersection, COLOR, COLOR, new Vec2f(length, RAY_SIZE));
-		}
+		sprite = new Line(position, intersection, COLOR);
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
-		shape.draw(g);
+		sprite.draw(g);
 	}
 
 	public Vec2f collidesCircle(Circle circle) {

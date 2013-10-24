@@ -103,10 +103,6 @@ public abstract class GameWorld {
 		return dimensions;
 	}
 
-	public void resize(Vec2f newSize) {
-		dimensions = new Vec2f(newSize.x, newSize.y);
-	}
-
 	public void removeRay(Ray ray) {
 		removeEntities.add(ray);
 	}

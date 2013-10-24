@@ -40,8 +40,6 @@ public abstract class PhysicalEntity extends CollidableEntity {
 		force = new Vec2f(0.0f, 0.0f);
 		impulse = new Vec2f(0.0f, 0.0f);
 		updateShape();
-		insideWorld();
-		updateShape();
 	}
 
 	public abstract void applyForce(Vec2f force);

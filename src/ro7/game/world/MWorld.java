@@ -40,8 +40,8 @@ public class MWorld extends GameWorld {
 				WALL_SIZE), new Vec2f(WALL_SIZE, dimensions.y - 2 * WALL_SIZE));
 		collidables.add(rightWall);
 		physEntities.add(rightWall);
-		Wall ceiling = new Wall(this, new Vec2f(-WALL_SIZE, 0.0f), new Vec2f(
-				dimensions.x + WALL_SIZE, WALL_SIZE));
+		Wall ceiling = new Wall(this, new Vec2f(0.0f, 0.0f), new Vec2f(
+				dimensions.x, WALL_SIZE));
 		collidables.add(ceiling);
 		physEntities.add(ceiling);
 
@@ -130,8 +130,8 @@ public class MWorld extends GameWorld {
 		return false;
 	}
 
-	public void shoot() {
-		Bullet bullet = player.shoot();
+	public void shoot(Vec2f point) {
+		Bullet bullet = player.shoot(point);
 		rays.add(bullet);
 	}
 
