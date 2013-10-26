@@ -1,5 +1,7 @@
 package ro7.engine.world.entities;
 
+import java.util.Map;
+
 import ro7.engine.sprites.shapes.CollidingShape;
 import ro7.engine.world.Collision;
 import ro7.engine.world.GameWorld;
@@ -7,9 +9,8 @@ import cs195n.Vec2f;
 
 public abstract class StaticEntity extends PhysicalEntity {
 
-	protected StaticEntity(GameWorld world, Vec2f position, float mass,
-			Vec2f velocity, float restitution, int groupIndex, CollidingShape shape) {
-		super(world, position, mass, velocity, restitution, groupIndex, shape);
+	protected StaticEntity(GameWorld world, Vec2f position, CollidingShape shape, Map<String, String> properties) {
+		super(world, position, shape, properties);
 	}
 
 	@Override

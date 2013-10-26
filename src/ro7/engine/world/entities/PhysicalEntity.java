@@ -1,5 +1,7 @@
 package ro7.engine.world.entities;
 
+import java.util.Map;
+
 import ro7.engine.sprites.shapes.CollidingShape;
 import ro7.engine.world.Collision;
 import ro7.engine.world.GameWorld;
@@ -13,24 +15,13 @@ public abstract class PhysicalEntity extends CollidableEntity {
 	protected Vec2f force;
 	protected float restitution;
 
-	protected PhysicalEntity(GameWorld world, Vec2f position, float mass,
-			Vec2f velocity, float restitution, int groupIndex, CollidingShape shape) {
-		super(world, position, groupIndex, shape);
-		this.mass = mass;
-		this.velocity = velocity;
+	protected PhysicalEntity(GameWorld world, Vec2f position, CollidingShape shape, Map<String, String> properties) {
+		super(world, position, shape, properties);
+		this.mass = Float.parseFloat(properties.get("mass"));
+		this.velocity = new Vec2f(Float.parseFloat(properties.get("velocityX")), Float.parseFloat(properties.get("velocityY")));
 		this.force = new Vec2f(0.0f, 0.0f);
 		this.impulse = new Vec2f(0.0f, 0.0f);
-		this.restitution = restitution;
-	}
-
-	protected PhysicalEntity(GameWorld world, Vec2f position, float mass,
-			float velocity, float restitution, int groupIndex, CollidingShape shape) {
-		super(world, position, groupIndex, shape);
-		this.mass = mass;
-		this.velocity = randomDirection().smult(velocity);
-		this.force = new Vec2f(0.0f, 0.0f);
-		this.impulse = new Vec2f(0.0f, 0.0f);
-		this.restitution = restitution;
+		this.restitution = Float.parseFloat(properties.get("restitution"));
 	}
 
 	@Override
@@ -71,7 +62,9 @@ public abstract class PhysicalEntity extends CollidableEntity {
 	
 	public abstract void onCollisionStatic(Collision collision);
 	
-	protected abstract void updateShape();
+	protected void updateShape() {
+		shape.move(position);
+	}
 
 	public void insideWorld() {
 		Vec2f min = new Vec2f(0.0f, 0.0f);

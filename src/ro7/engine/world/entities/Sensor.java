@@ -1,6 +1,7 @@
 package ro7.engine.world.entities;
 
 import java.awt.Graphics2D;
+import java.util.Map;
 
 import cs195n.Vec2f;
 import ro7.engine.sprites.shapes.CollidingShape;
@@ -12,9 +13,8 @@ public class Sensor extends CollidableEntity {
 	
 	private Output output;
 
-	public Sensor(GameWorld world, Vec2f position, int groupIndex,
-			CollidingShape shape, Output output) {
-		super(world, position, groupIndex, shape);
+	public Sensor(GameWorld world, Vec2f position, CollidingShape shape, Output output, Map<String, String> properties) {
+		super(world, position, shape, properties);
 		this.output = output;
 	}
 

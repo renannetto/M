@@ -1,5 +1,8 @@
 package ro7.game.world;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -7,11 +10,13 @@ import ro7.engine.world.Collision;
 import ro7.engine.world.GameWorld;
 import ro7.engine.world.entities.CollidableEntity;
 import ro7.engine.world.entities.PhysicalEntity;
+import cs195n.CS195NLevelReader;
+import cs195n.CS195NLevelReader.InvalidLevelException;
+import cs195n.LevelData;
 import cs195n.Vec2f;
 
 public class MWorld extends GameWorld {
 
-	private final float WALL_SIZE = 50.0f;
 	private final Vec2f GRAVITY = new Vec2f(0.0f, 300.0f);
 
 	private Player player;
@@ -23,45 +28,24 @@ public class MWorld extends GameWorld {
 	Set<Bullet> removeShoots;
 	Set<Grenade> removeGrenades;
 
-	public MWorld(Vec2f dimensions) {
+	public MWorld(Vec2f dimensions) throws FileNotFoundException, InvalidLevelException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		super(dimensions);
 
 		physEntities = new HashSet<PhysicalEntity>();
-
-		floor = new Wall(this, new Vec2f(0.0f, dimensions.y - WALL_SIZE),
-				new Vec2f(dimensions.x, WALL_SIZE));
-		collidables.add(floor);
-		physEntities.add(floor);
-		Wall leftWall = new Wall(this, new Vec2f(0.0f, WALL_SIZE), new Vec2f(
-				WALL_SIZE, dimensions.y - 2 * WALL_SIZE));
-		collidables.add(leftWall);
-		physEntities.add(leftWall);
-		Wall rightWall = new Wall(this, new Vec2f(dimensions.x - WALL_SIZE,
-				WALL_SIZE), new Vec2f(WALL_SIZE, dimensions.y - 2 * WALL_SIZE));
-		collidables.add(rightWall);
-		physEntities.add(rightWall);
-		Wall ceiling = new Wall(this, new Vec2f(0.0f, 0.0f), new Vec2f(
-				dimensions.x, WALL_SIZE));
-		collidables.add(ceiling);
-		physEntities.add(ceiling);
-
-		player = new Player(this, new Vec2f(dimensions.x / 2.0f, dimensions.y
-				- WALL_SIZE - 50.0f));
-		collidables.add(player);
-		physEntities.add(player);
-
-		HeavyObject heavy = new HeavyObject(this, new Vec2f(
-				3 * dimensions.x / 4.0f, dimensions.y / 2.0f));
-		collidables.add(heavy);
-		physEntities.add(heavy);
-
-		LightObject light = new LightObject(this, new Vec2f(
-				dimensions.x / 4.0f, dimensions.y / 2.0f));
-		collidables.add(light);
-		physEntities.add(light);
 		
 		removeShoots = new HashSet<Bullet>();
 		removeGrenades = new HashSet<Grenade>();
+		
+		LevelData level = CS195NLevelReader.readLevel(new File("levels/first_level.nlf"));
+		initLevel(level);
+	}
+	
+	@Override
+	public void setGameClasses() {
+		classes.put("Player", Player.class);
+		classes.put("Enemy", Enemy.class);
+		classes.put("Wall", Wall.class);
+		classes.put("Grenade", Grenade.class);
 	}
 
 	@Override
@@ -98,38 +82,7 @@ public class MWorld extends GameWorld {
 			}
 		}
 	}
-
-	public void createLightObject(Vec2f position) {
-		if (collidables.size() < 15) {
-			LightObject object = new LightObject(this, position);
-			if (!collides(object)) {
-				collidables.add(object);
-				physEntities.add(object);
-			}
-		}
-	}
-
-	public void createHeavyObject(Vec2f position) {
-		if (collidables.size() < 15) {
-			HeavyObject object = new HeavyObject(this, position);
-			if (!collides(object)) {
-				collidables.add(object);
-				physEntities.add(object);
-			}
-		}
-	}
-
-	private boolean collides(CollidableEntity collidable) {
-		for (CollidableEntity entity : collidables) {
-			Collision collision = entity
-					.collides(collidable);
-			if (collision.validCollision()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
+	
 	public void shoot(Vec2f point) {
 		Bullet bullet = player.shoot(point);
 		rays.add(bullet);

@@ -1,6 +1,7 @@
 package ro7.engine.sprites.shapes;
 
 import java.awt.Color;
+import java.util.List;
 import java.util.Set;
 
 import ro7.engine.sprites.Sprite;
@@ -56,5 +57,11 @@ public abstract class CollidingShape extends Sprite {
 	}
 
 	public abstract Vec2f center();
+	
+	public abstract List<Vec2f> getPoints();
+
+	public void move(Vec2f position) {
+		this.position = position;
+	}
 
 }

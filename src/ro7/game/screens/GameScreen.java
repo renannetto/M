@@ -22,13 +22,11 @@ public class GameScreen extends Screen {
 	private Viewport viewport;
 	private MWorld world;
 
-	private int object;
 	private Set<Integer> pressedKeys;
 
 	public GameScreen(Application app) {
 		super(app);
 		pressedKeys = new HashSet<Integer>();
-		object = 1;
 	}
 
 	@Override
@@ -55,12 +53,6 @@ public class GameScreen extends Screen {
 	public void onKeyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 		switch (keyCode) {
-		case 49:
-			object = 1;
-			break;
-		case 50:
-			object = 2;
-			break;
 		case 65:
 			world.movePlayer(new Vec2f(-1.0f, 0.0f));
 			break;
@@ -75,7 +67,12 @@ public class GameScreen extends Screen {
 			world.movePlayer(new Vec2f(1.0f, 0.0f));
 			break;
 		case 82:
-			world = new MWorld(new Vec2f(windowSize.x, windowSize.y));
+			try {
+				world = new MWorld(new Vec2f(windowSize.x, windowSize.y));
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} 
 			viewport = new Viewport(new Vec2f(0.0f, 0.0f), new Vec2f(
 					windowSize.x, windowSize.y), world, new Vec2f(1.0f, 1.0f),
 					new Vec2f(0.0f, 0.0f));
@@ -101,13 +98,7 @@ public class GameScreen extends Screen {
 		Vec2f gamePosition = viewport.screenToGame(new Vec2f(point.x, point.y));
 		if (button == 1) {
 			world.shoot(gamePosition);
-		} else if (button == 3) {
-			if (object == 1) {
-				world.createLightObject(gamePosition);
-			} else {
-				world.createHeavyObject(gamePosition);
-			}
-		}
+		} 
 	}
 
 	@Override
@@ -159,6 +150,8 @@ public class GameScreen extends Screen {
 			}
 		} catch (NullPointerException e) {
 			System.out.println("No window size defined");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

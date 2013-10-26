@@ -1,6 +1,7 @@
 package ro7.engine.world.entities;
 
 import java.awt.Graphics2D;
+import java.util.Map;
 
 import ro7.engine.sprites.shapes.CollidingShape;
 import ro7.engine.world.Collision;
@@ -9,12 +10,9 @@ import ro7.engine.world.RayCollision;
 import cs195n.Vec2f;
 
 public abstract class CollidableEntity extends GroupEntity {
-
-	protected CollidingShape shape;
 	
-	protected CollidableEntity(GameWorld world, Vec2f position, int groupIndex, CollidingShape shape) {
-		super(world, position, groupIndex);
-		this.shape = shape;
+	protected CollidableEntity(GameWorld world, Vec2f position, CollidingShape shape, Map<String, String> properties) {
+		super(world, position, shape, properties);
 	}
 	
 	public Collision collides(CollidableEntity other) {

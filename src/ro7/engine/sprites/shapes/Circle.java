@@ -172,6 +172,7 @@ public class Circle extends SingleShape {
 		}
 	}
 
+	@Override
 	public List<Vec2f> getPoints() {
 		List<Vec2f> points = new ArrayList<Vec2f>();
 		points.add(position);

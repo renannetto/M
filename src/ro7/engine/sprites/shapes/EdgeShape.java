@@ -21,6 +21,11 @@ public abstract class EdgeShape extends SingleShape {
 		}
 	}
 	
+	protected EdgeShape(Vec2f position, Color borderColor, Color fillColor, List<Vec2f> points) {
+		super(position, borderColor, fillColor);
+		this.points = points;
+	}
+	
 	public Set<Edge> edges() {
 		Set<Edge> edges = new HashSet<Edge>();
 		for (int i=0; i<points.size(); i++) {

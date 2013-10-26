@@ -2,6 +2,7 @@ package ro7.game.world;
 
 import java.awt.Color;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import ro7.engine.sprites.shapes.Circle;
@@ -12,10 +13,6 @@ import cs195n.Vec2f;
 
 public class Grenade extends MDynamicEntity {
 
-	private static final float VELOCITY = 500.0f;
-	private static final float MASS = 1.0f;
-	private static final float RESTITUTION = 0.3f;
-	private static final int GROUP = -2;
 	private static final Color COLOR = Color.GRAY;
 	private static final float GRENADE_RADIUS = 10.0f;
 
@@ -26,9 +23,8 @@ public class Grenade extends MDynamicEntity {
 	private Set<GrenadeRay> rays;
 	private float elapsedTime;
 
-	protected Grenade(GameWorld world, Vec2f position, Vec2f direction) {
-		super(world, position, MASS, direction.smult(VELOCITY), RESTITUTION, GROUP,
-				new Circle(position, COLOR, COLOR, GRENADE_RADIUS));
+	protected Grenade(GameWorld world, Vec2f position, Map<String, String> properties) {
+		super(world, position, new Circle(position, COLOR, COLOR, GRENADE_RADIUS), properties);
 
 		rays = new HashSet<GrenadeRay>();
 	}
@@ -74,11 +70,6 @@ public class Grenade extends MDynamicEntity {
 		}
 
 		((MWorld) world).removeGrenade(this);
-	}
-
-	@Override
-	protected void updateShape() {
-		shape = new Circle(position, COLOR, COLOR, GRENADE_RADIUS);
 	}
 	
 	@Override

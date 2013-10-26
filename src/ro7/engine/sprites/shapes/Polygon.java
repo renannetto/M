@@ -15,6 +15,10 @@ public class Polygon extends EdgeShape {
 	public Polygon(Vec2f position, Color fillColor, Vec2f... points) {
 		super(position, fillColor, fillColor, points);
 	}
+	
+	public Polygon(Vec2f position, Color fillColor, List<Vec2f> points) {
+		super(position, fillColor, fillColor, points);
+	}
 
 	@Override
 	public Vec2f collides(CollidingShape shape) {

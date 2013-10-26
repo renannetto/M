@@ -20,6 +20,11 @@ public class CompoundShape extends CollidingShape {
 			this.shapes.add(shape);
 		}
 	}
+	
+	public CompoundShape(Vec2f position, List<CollidingShape> shapes) {
+		super(position);
+		this.shapes = shapes;
+	}
 
 	public List<CollidingShape> getShapes() {
 		return new ArrayList<CollidingShape>(shapes);
@@ -122,8 +127,24 @@ public class CompoundShape extends CollidingShape {
 
 	@Override
 	public Vec2f center() {
-		// TODO Auto-generated method stub
-		return null;
+		float xCenter = 0;
+		float yCenter = 0;
+		List<Vec2f> points = getPoints();
+		int npoints = points.size();
+		for (Vec2f point : points) {
+			xCenter += point.x;
+			yCenter += point.y;
+		}
+		return new Vec2f(xCenter/npoints, yCenter/npoints);
+	}
+
+	@Override
+	public List<Vec2f> getPoints() {
+		List<Vec2f> points = new ArrayList<Vec2f>();
+		for (CollidingShape shape : shapes) {
+			points.addAll(shape.getPoints());
+		}
+		return points;
 	}
 
 }
