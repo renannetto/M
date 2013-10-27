@@ -10,7 +10,7 @@ public class GrenadeRay extends Ray {
 	private static final int GROUP = -2;
 
 	protected GrenadeRay(GameWorld world, Vec2f position, Vec2f direction) {
-		super(world, position, GROUP, direction);
+		super(world, GROUP, position, direction);
 	}
 
 	@Override

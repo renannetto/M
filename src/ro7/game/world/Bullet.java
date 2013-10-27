@@ -11,7 +11,7 @@ public class Bullet extends Ray {
 	private static final int GROUP = -1;
 
 	public Bullet(GameWorld world, Vec2f position, Vec2f direction) {
-		super(world, position, GROUP, direction);
+		super(world, GROUP, position, direction);
 	}
 
 	@Override

@@ -23,8 +23,8 @@ public class Grenade extends MDynamicEntity {
 	private Set<GrenadeRay> rays;
 	private float elapsedTime;
 
-	protected Grenade(GameWorld world, Vec2f position, Map<String, String> properties) {
-		super(world, position, new Circle(position, COLOR, COLOR, GRENADE_RADIUS), properties);
+	protected Grenade(GameWorld world, Map<String, String> properties, Vec2f position) {
+		super(world, new Circle(position, COLOR, COLOR, GRENADE_RADIUS), properties);
 
 		rays = new HashSet<GrenadeRay>();
 	}
@@ -40,6 +40,7 @@ public class Grenade extends MDynamicEntity {
 	}
 
 	private void explode() {
+		Vec2f position = shape.getPosition();
 		rays.add(new GrenadeRay(world, position, new Vec2f(1.0f, 0.0f)));
 		rays.add(new GrenadeRay(world, position, new Vec2f(1.0f, -1.0f)));
 		rays.add(new GrenadeRay(world, position, new Vec2f(0.0f, -1.0f)));

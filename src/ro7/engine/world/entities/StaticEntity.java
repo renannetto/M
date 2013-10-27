@@ -9,8 +9,8 @@ import cs195n.Vec2f;
 
 public abstract class StaticEntity extends PhysicalEntity {
 
-	protected StaticEntity(GameWorld world, Vec2f position, CollidingShape shape, Map<String, String> properties) {
-		super(world, position, shape, properties);
+	protected StaticEntity(GameWorld world, CollidingShape shape, Map<String, String> properties) {
+		super(world, shape, properties);
 	}
 
 	@Override
@@ -24,7 +24,9 @@ public abstract class StaticEntity extends PhysicalEntity {
 		Vec2f mtv = collision.mtv;
 		Vec2f centerDistance = collision.thisShape.center().minus(
 				collision.otherShape.center());
-		assert mtv.dot(centerDistance) >= 0;
+		if (mtv.dot(centerDistance) < 0) {
+			mtv = mtv.smult(-1.0f);
+		}
 
 		PhysicalEntity other = (PhysicalEntity) collision.other;
 		other.onCollisionStatic(new Collision(this, mtv.smult(-1.0f), other.shape, this.shape));
@@ -36,20 +38,20 @@ public abstract class StaticEntity extends PhysicalEntity {
 		if (mtv.mag2() == 0) {
 			return;
 		}
+
 		PhysicalEntity other = (PhysicalEntity) collision.other;
-		other.position = other.position.plus(mtv.smult(-1.0f));
+		other.shape.move(mtv.smult(-1.0f));
 		
 		mtv = mtv.normalized();
-		
+
 		float cor = this.cor(other);
-		float ua = this.velocity.dot(mtv);
-		float ub = other.velocity.dot(mtv);
-		float mb = other.mass;
-		
-		float impulse = mb*(1+cor)*(ub-ua);
-		
-		applyImpulse(mtv.smult(impulse/2.0f));
-		other.applyImpulse(mtv.smult(-impulse/2.0f));
+		float ua = other.velocity.dot(mtv);
+		float ub = this.velocity.dot(mtv);
+		float ma = other.mass;
+
+		float impulse = ma * (1 + cor) * (ub - ua);
+
+		other.applyImpulse(mtv.smult(impulse));
 	}
 	
 	@Override

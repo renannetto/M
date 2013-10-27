@@ -187,4 +187,10 @@ public class Circle extends SingleShape {
 		return distance < (radius*radius);
 	}
 
+	@Override
+	public void updatePoints(Vec2f translation) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

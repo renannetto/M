@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,9 +18,8 @@ public class AAB extends EdgeShape {
 
 	public AAB(Vec2f position, Color borderColor, Color fillColor,
 			Vec2f dimensions) {
-		super(position, borderColor, fillColor, position, position.plus(0.0f,
-				dimensions.y), position.plus(dimensions.x, dimensions.y),
-				position.plus(dimensions.x, 0.0f));
+		super(position, borderColor, fillColor, position.minus(dimensions.sdiv(2.0f)), position.plus(dimensions.x/2, -dimensions.y/2), 
+				position.plus(dimensions.x/2, dimensions.y/2), position.plus(-dimensions.x/2,dimensions.y/2));
 		this.dimensions = dimensions;
 	}
 
@@ -31,8 +31,8 @@ public class AAB extends EdgeShape {
 	@Override
 	public Vec2f collidesCircle(Circle circle) {
 		Vec2f center = circle.center();
-		Vec2f minAAB = this.getPosition();
-		Vec2f maxAAB = minAAB.plus(this.getDimensions());
+		Vec2f minAAB = this.position.minus(dimensions.sdiv(2.0f));
+		Vec2f maxAAB = minAAB.plus(dimensions);
 
 		float pointx;
 		float pointy;
@@ -76,9 +76,9 @@ public class AAB extends EdgeShape {
 
 	@Override
 	public Vec2f collidesAAB(AAB aab) {
-		Vec2f minThis = this.position;
+		Vec2f minThis = this.position.minus(dimensions.sdiv(2.0f));
 		Vec2f maxThis = minThis.plus(this.dimensions);
-		Vec2f minAAB = aab.position;
+		Vec2f minAAB = aab.position.minus(aab.dimensions.sdiv(2.0f));
 		Vec2f maxAAB = minAAB.plus(aab.dimensions);
 
 		if (!(minThis.x <= maxAAB.x && maxThis.x >= minAAB.x
@@ -138,7 +138,7 @@ public class AAB extends EdgeShape {
 
 	@Override
 	public void draw(Graphics2D g) {
-		Rectangle2D rectangle = new Rectangle2D.Float(position.x, position.y,
+		Rectangle2D rectangle = new Rectangle2D.Float(position.x-dimensions.x/2, position.y-dimensions.y/2,
 				dimensions.x, dimensions.y);
 
 		g.setColor(borderColor);
@@ -155,13 +155,22 @@ public class AAB extends EdgeShape {
 	}
 
 	public Shape getShape() {
-		return new Rectangle2D.Float(position.x, position.y, dimensions.x,
+		return new Rectangle2D.Float(position.x-dimensions.x/2, position.y-dimensions.y/2, dimensions.x,
 				dimensions.y);
 	}
 
 	@Override
 	public Vec2f center() {
-		return position.plus(dimensions.sdiv(2.0f));
+		return position;
+	}
+
+	@Override
+	public void updatePoints(Vec2f translation) {
+		this.points = new ArrayList<Vec2f>();
+		points.add(position.minus(dimensions.sdiv(2.0f)));
+		points.add(position.plus(dimensions.x/2, -dimensions.y/2));
+		points.add(position.plus(dimensions.x/2, dimensions.y/2));
+		points.add(position.plus(-dimensions.x/2,dimensions.y/2));
 	}
 
 }

@@ -5,15 +5,14 @@ import java.awt.Graphics2D;
 import ro7.engine.sprites.shapes.CollidingShape;
 import ro7.engine.world.GameWorld;
 import ro7.engine.world.io.Output;
-import cs195n.Vec2f;
 
 public class Relay extends Entity {
 	
 	private boolean enable;
 	private Output output;
 
-	protected Relay(GameWorld world, Vec2f position, CollidingShape shape, Output output) {
-		super(world, position, shape);
+	protected Relay(GameWorld world, CollidingShape shape, Output output) {
+		super(world, shape);
 		enable = false;
 		this.output = output;
 	}

@@ -3,6 +3,7 @@ package ro7.engine.sprites.shapes;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -116,7 +117,7 @@ public class Polygon extends EdgeShape {
 	public void draw(Graphics2D g) {
 		g.setColor(fillColor);
 		Path2D path = new Path2D.Float();
-		path.moveTo(position.x, position.y);
+		path.moveTo(points.get(0).x, points.get(0).y);
 		for (Vec2f point : points) {
 			path.lineTo(point.x, point.y);
 		}
@@ -133,6 +134,15 @@ public class Polygon extends EdgeShape {
 			yCenter += point.y;
 		}
 		return new Vec2f(xCenter/npoints, yCenter/npoints);
+	}
+
+	@Override
+	public void updatePoints(Vec2f translation) {
+		List<Vec2f> newPoints = new ArrayList<Vec2f>();
+		for (Vec2f point : points) {
+			newPoints.add(point.plus(translation));
+		}
+		points = newPoints;
 	}
 
 }

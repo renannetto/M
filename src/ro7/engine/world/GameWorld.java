@@ -18,6 +18,7 @@ import ro7.engine.sprites.shapes.CompoundShape;
 import ro7.engine.sprites.shapes.Polygon;
 import ro7.engine.world.entities.CollidableEntity;
 import ro7.engine.world.entities.Entity;
+import ro7.engine.world.entities.PhysicalEntity;
 import ro7.engine.world.entities.Ray;
 import cs195n.LevelData;
 import cs195n.LevelData.EntityData;
@@ -27,11 +28,30 @@ import cs195n.Vec2f;
 
 public abstract class GameWorld {
 	
+	private final static Map<String, Color> COLORS;
+	static {
+		COLORS = new HashMap<String, Color>();
+		COLORS.put("BLACK", Color.BLACK);
+		COLORS.put("BLUE", Color.BLUE);
+		COLORS.put("CYAN", Color.CYAN);
+		COLORS.put("DARK_GRAY", Color.DARK_GRAY);
+		COLORS.put("GRAY", Color.GRAY);
+		COLORS.put("GREEN", Color.GREEN);
+		COLORS.put("LIGHT_GRAY", Color.LIGHT_GRAY);
+		COLORS.put("MAGENTA", Color.MAGENTA);
+		COLORS.put("ORANGE", Color.ORANGE);
+		COLORS.put("PINK", Color.PINK);
+		COLORS.put("RED", Color.RED);
+		COLORS.put("WHITE", Color.WHITE);
+		COLORS.put("YELLOW", Color.YELLOW);
+	}
+	
 	protected Map<String, Class<?>> classes;
 	protected Map<String, Entity> entities;
 
 	protected Vec2f dimensions;
 	protected List<CollidableEntity> collidables;
+	protected Set<PhysicalEntity> physEntities;
 	protected Set<Ray> rays;
 	
 	protected Set<String> removeEntities;
@@ -40,6 +60,7 @@ public abstract class GameWorld {
 	protected GameWorld(Vec2f dimensions) {
 		this.dimensions = dimensions;
 		collidables = new ArrayList<CollidableEntity>();
+		physEntities = new HashSet<PhysicalEntity>();
 		rays = new HashSet<Ray>();
 		
 		removeEntities = new HashSet<String>();
@@ -52,12 +73,12 @@ public abstract class GameWorld {
 	
 	public abstract void setGameClasses();
 	
-	public void initLevel(LevelData level) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public void initLevel(LevelData level) {
 		List<? extends EntityData> entitiesDatas = level.getEntities();
 		for (EntityData entityData : entitiesDatas) {
-			String entityName = entityData.getName();
-			Class<?> entityClass = classes.get(entityName);
-			Constructor<?> constructor = entityClass.getConstructor(GameWorld.class, Vec2f.class, Map.class);
+			String entityClassName = entityData.getEntityClass();
+			Class<?> entityClass = classes.get(entityClassName);
+			
 			
 			List<? extends ShapeData> shapeDatas = entityData.getShapes();
 			CollidingShape shape;
@@ -71,10 +92,33 @@ public abstract class GameWorld {
 			} else {
 				shape = createShape(shapeDatas.get(0));
 			}
-			Vec2f position = shape.center();
 			Map<String, String> properties = entityData.getProperties();
 			
-			constructor.newInstance(this, position, properties);
+			Constructor<?> constructor;
+			try {
+				constructor = entityClass.getConstructor(GameWorld.class, CollidingShape.class, Map.class);
+				Entity entity = (Entity)constructor.newInstance(this, shape, properties);
+				String entityName = entityData.getName();
+				entities.put(entityName, entity);
+			} catch (NoSuchMethodException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Invalid constructor");
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Constructor can't be accessed");
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -84,18 +128,27 @@ public abstract class GameWorld {
 		Type type = shapeData.getType();
 		Vec2f center = shapeData.getCenter();
 		Map<String, String> properties = shapeData.getProperties();
+		
+		String colorString = properties.get("color");
+		Color color;
+		if (COLORS.containsKey(colorString)) {
+			color = COLORS.get(colorString);
+		} else {
+			color = Color.decode(colorString);
+		}
+		
 		switch (type) {
 		case CIRCLE:
 			float radius = shapeData.getRadius();
-			shape = new Circle(center, Color.decode(properties.get("color")), Color.decode(properties.get("color")), radius);
+			shape = new Circle(center, color, color, radius);
 			break;
 		case BOX:
 			Vec2f dimensions = new Vec2f(shapeData.getWidth(), shapeData.getHeight());
-			shape = new AAB(center, Color.decode(properties.get("color")), Color.decode(properties.get("color")), dimensions);
+			shape = new AAB(center, color, color, dimensions);
 			break;
 		case POLY:
 			List<Vec2f> points = shapeData.getVerts();
-			shape = new Polygon(center, Color.decode(properties.get("color")), points);
+			shape = new Polygon(center, color, points);
 			break;
 		}
 		return shape;
@@ -187,6 +240,14 @@ public abstract class GameWorld {
 
 	public void removeRay(Ray ray) {
 		removeRays.add(ray);
+	}
+
+	public void addCollidableEntity(CollidableEntity entity) {
+		collidables.add(entity);
+	}
+	
+	public void addPhysicalEntity(PhysicalEntity entity) {
+		physEntities.add(entity);
 	}
 
 }

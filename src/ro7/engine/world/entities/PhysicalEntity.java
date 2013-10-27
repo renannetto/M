@@ -15,13 +15,15 @@ public abstract class PhysicalEntity extends CollidableEntity {
 	protected Vec2f force;
 	protected float restitution;
 
-	protected PhysicalEntity(GameWorld world, Vec2f position, CollidingShape shape, Map<String, String> properties) {
-		super(world, position, shape, properties);
+	protected PhysicalEntity(GameWorld world, CollidingShape shape, Map<String, String> properties) {
+		super(world, shape, properties);
 		this.mass = Float.parseFloat(properties.get("mass"));
 		this.velocity = new Vec2f(Float.parseFloat(properties.get("velocityX")), Float.parseFloat(properties.get("velocityY")));
 		this.force = new Vec2f(0.0f, 0.0f);
 		this.impulse = new Vec2f(0.0f, 0.0f);
 		this.restitution = Float.parseFloat(properties.get("restitution"));
+		
+		world.addPhysicalEntity(this);
 	}
 
 	@Override
@@ -29,10 +31,10 @@ public abstract class PhysicalEntity extends CollidableEntity {
 		float seconds = nanoseconds / 1000000000.0f;
 		velocity = velocity.plus(force.sdiv(mass).smult(seconds)).plus(
 				impulse.sdiv(mass));
-		position = position.plus(velocity.smult(seconds));
+		Vec2f translation = velocity.smult(seconds);
+		shape.move(translation);
 		force = new Vec2f(0.0f, 0.0f);
 		impulse = new Vec2f(0.0f, 0.0f);
-		updateShape();
 	}
 
 	public abstract void applyForce(Vec2f force);
@@ -61,33 +63,6 @@ public abstract class PhysicalEntity extends CollidableEntity {
 	public abstract void onCollisionDynamic(Collision collision);
 	
 	public abstract void onCollisionStatic(Collision collision);
-	
-	protected void updateShape() {
-		shape.move(position);
-	}
-
-	public void insideWorld() {
-		Vec2f min = new Vec2f(0.0f, 0.0f);
-		Vec2f max = world.getDimensions();
-
-		Vec2f center = shape.center();
-		Vec2f translate;
-		if (center.x < min.x) {
-			translate = new Vec2f(min.x - center.x, 0.0f);
-			position = position.plus(translate);
-		} else if (center.x > max.x) {
-			translate = new Vec2f(max.x - center.x, 0.0f);
-			position = position.plus(translate);
-		}
-
-		if (center.y < min.y) {
-			translate = new Vec2f(0.0f, min.y - center.y);
-			position = position.plus(translate);
-		} else if (center.y > max.y) {
-			translate = new Vec2f(0.0f, max.y - center.y);
-			position = position.plus(translate);
-		}
-	}
 
 	public float cor(PhysicalEntity other) {
 		return (float) Math.sqrt(restitution * other.restitution);

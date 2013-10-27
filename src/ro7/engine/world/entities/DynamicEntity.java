@@ -9,8 +9,9 @@ import cs195n.Vec2f;
 
 public abstract class DynamicEntity extends PhysicalEntity {
 
-	protected DynamicEntity(GameWorld world, Vec2f position, CollidingShape shape, Map<String, String> properties) {
-		super(world, position, shape, properties);
+	protected DynamicEntity(GameWorld world, CollidingShape shape,
+			Map<String, String> properties) {
+		super(world, shape, properties);
 	}
 
 	@Override
@@ -24,7 +25,9 @@ public abstract class DynamicEntity extends PhysicalEntity {
 		Vec2f mtv = collision.mtv;
 		Vec2f centerDistance = collision.thisShape.center().minus(
 				collision.otherShape.center());
-		assert mtv.dot(centerDistance) >= 0;
+		if (mtv.dot(centerDistance) < 0) {
+			mtv = mtv.smult(-1.0f);
+		}
 
 		PhysicalEntity other = (PhysicalEntity) collision.other;
 		other.onCollisionDynamic(new Collision(this, mtv.smult(-1.0f),
@@ -37,10 +40,11 @@ public abstract class DynamicEntity extends PhysicalEntity {
 		if (mtv.mag2() == 0) {
 			return;
 		}
+
 		PhysicalEntity other = (PhysicalEntity) collision.other;
-		position = position.plus(mtv.sdiv(2.0f));
-		other.position = other.position.plus(mtv.smult(-1.0f).sdiv(2.0f));
-		
+		shape.move(mtv.sdiv(2.0f));
+		other.shape.move(mtv.smult(-1.0f).sdiv(2.0f));
+
 		mtv = mtv.normalized();
 
 		float cor = this.cor(other);
@@ -51,8 +55,8 @@ public abstract class DynamicEntity extends PhysicalEntity {
 
 		float impulse = ((ma * mb * (1 + cor)) / (ma + mb)) * (ub - ua);
 
-		applyImpulse(mtv.smult(impulse/2.0f));
-		other.applyImpulse(mtv.smult(-impulse/2.0f));
+		applyImpulse(mtv.smult(impulse));
+		other.applyImpulse(mtv.smult(-impulse));
 	}
 
 	@Override
@@ -61,8 +65,9 @@ public abstract class DynamicEntity extends PhysicalEntity {
 		if (mtv.mag2() == 0) {
 			return;
 		}
+
 		PhysicalEntity other = (PhysicalEntity) collision.other;
-		position = position.plus(mtv);
+		shape.move(mtv);
 		
 		mtv = mtv.normalized();
 
@@ -74,7 +79,6 @@ public abstract class DynamicEntity extends PhysicalEntity {
 		float impulse = ma * (1 + cor) * (ub - ua);
 
 		applyImpulse(mtv.smult(impulse));
-		other.applyImpulse(mtv.smult(-impulse));
 	}
 
 }

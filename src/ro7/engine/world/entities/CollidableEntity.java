@@ -11,8 +11,9 @@ import cs195n.Vec2f;
 
 public abstract class CollidableEntity extends GroupEntity {
 	
-	protected CollidableEntity(GameWorld world, Vec2f position, CollidingShape shape, Map<String, String> properties) {
-		super(world, position, shape, properties);
+	protected CollidableEntity(GameWorld world, CollidingShape shape, Map<String, String> properties) {
+		super(world, shape, properties);
+		world.addCollidableEntity(this);
 	}
 	
 	public Collision collides(CollidableEntity other) {

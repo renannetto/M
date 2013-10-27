@@ -9,8 +9,8 @@ import cs195n.Vec2f;
 
 public abstract class MDynamicEntity extends DynamicEntity implements MEntity {
 	
-	protected MDynamicEntity(GameWorld world, Vec2f position, CollidingShape shape, Map<String, String> properties) {
-		super(world, position, shape, properties);
+	protected MDynamicEntity(GameWorld world, CollidingShape shape, Map<String, String> properties) {
+		super(world, shape, properties);
 	}
 
 	public void shooted(Vec2f impulse) {

@@ -11,7 +11,7 @@ import cs195n.Vec2f;
 
 public abstract class EdgeShape extends SingleShape {
 	
-	protected final List<Vec2f> points;
+	protected List<Vec2f> points;
 
 	protected EdgeShape(Vec2f position, Color borderColor, Color fillColor, Vec2f... points) {
 		super(position, borderColor, fillColor);
@@ -23,7 +23,10 @@ public abstract class EdgeShape extends SingleShape {
 	
 	protected EdgeShape(Vec2f position, Color borderColor, Color fillColor, List<Vec2f> points) {
 		super(position, borderColor, fillColor);
-		this.points = points;
+		this.points = new ArrayList<Vec2f>();
+		for (Vec2f point : points) {
+			this.points.add(point);
+		}
 	}
 	
 	public Set<Edge> edges() {

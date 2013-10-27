@@ -18,13 +18,15 @@ public abstract class Ray extends GroupEntity {
 	private final Color COLOR = Color.RED;
 	private final float TIME_LIMIT = 0.1f;
 
+	protected Vec2f position;
 	protected Vec2f direction;
 	protected Line sprite;
 	protected float elapsedTime;
 
-	protected Ray(GameWorld world, Vec2f position, int groupIndex,
+	protected Ray(GameWorld world, int groupIndex, Vec2f position,
 			Vec2f direction) {
-		super(world, position, groupIndex);
+		super(world, groupIndex);
+		this.position = position;
 		this.direction = direction.normalized();
 		elapsedTime = 0;
 	}

@@ -2,7 +2,6 @@ package ro7.game.world;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,27 +16,30 @@ import cs195n.Vec2f;
 
 public class MWorld extends GameWorld {
 
-	private final Vec2f GRAVITY = new Vec2f(0.0f, 300.0f);
+	private final Vec2f GRAVITY = new Vec2f(0.0f, 100.0f);
 
 	private Player player;
-
-	Set<PhysicalEntity> physEntities;
-
-	Wall floor;
 	
-	Set<Bullet> removeShoots;
-	Set<Grenade> removeGrenades;
+	private Set<Bullet> removeShoots;
+	private Set<Grenade> removeGrenades;
 
-	public MWorld(Vec2f dimensions) throws FileNotFoundException, InvalidLevelException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public MWorld(Vec2f dimensions) {
 		super(dimensions);
-
-		physEntities = new HashSet<PhysicalEntity>();
 		
 		removeShoots = new HashSet<Bullet>();
 		removeGrenades = new HashSet<Grenade>();
 		
-		LevelData level = CS195NLevelReader.readLevel(new File("levels/first_level.nlf"));
-		initLevel(level);
+		try {
+			LevelData level = CS195NLevelReader.readLevel(new File("levels/first_level.nlf"));
+			initLevel(level);
+			player = (Player)entities.get("player");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvalidLevelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

@@ -147,4 +147,11 @@ public class CompoundShape extends CollidingShape {
 		return points;
 	}
 
+	@Override
+	public void updatePoints(Vec2f translation) {
+		for (CollidingShape shape : shapes) {
+			shape.updatePoints(translation);
+		}
+	}
+
 }
