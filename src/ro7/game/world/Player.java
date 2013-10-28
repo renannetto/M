@@ -115,4 +115,8 @@ public class Player extends MDynamicEntity {
 		deadTime = 0;
 	}
 
+	public Vec2f getPosition() {
+		return shape.center();
+	}
+
 }

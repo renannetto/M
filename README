@@ -1,14 +1,17 @@
 M 2 README
 
 Engine requirements:
- - Restitution: each PhysicalEntity in ro7.engine.world now has a restitution attribute. There is also two subclasses DynamicEntity and StaticEntity which extends PhysicalEntity and deals collisions in different ways. Both will calculate the impulse using the appropriate restitution formula and apply it on both shapes.
- - Raycasting: the class Ray in ro7.engine.world can check if it is colliding with Circles, AABs and Polygons and returns the point of collision. The CollidableEntity class in the same package contains a collidesRay method which will get this point and return a RayCollision object, with information about the collision. Finally, the GameWorld class in the same package will iterate through all the rays on its update method to find the closest intersection point and apply the collision on it.
+ - Entity I/O: the package ro7.engine.world.io contains three classes: Ouptut, Connection and Input, which allow games to define connections between entities.
+ - Standard entities: the package ro7.engine.world.entities contains Sensor and Relay classes, which represent those standard entities.
+ - Read levels from files: the GameWorld class in ro7.engine.world contains a readLevel method which read data from a level data created by the TA level editor. To use it, it is necessary to override the method setGameClasses, which creates a mapping from Strings to available Entity classes.
 
 Game requirements:
- - The circles are completely ellastic (restitution = 1), the player and the walls are completely inelastic (restitution = 0) and the triangle has a restitution of 0.5. So, when anything collides with the walls or the player is a completely inelastic collision, when two circles collide it is an ellastic collision and when a circle or a triangle collides with a triangle it is an inelastic collision.
- - The player can fire bullets, which are represented as rays. The player can also toss grenades, which emit rays in different directions.
- - The player can jump only if it is above a solid object. This is verified in the jump method on MWorld, which checks if it has a collision with a mtv pointing to up.
+ - The camera moves to keep the player on the center.
+ - The game is being constructed by reading the file "first_level.nlf" in the levels directory.
+ - You win when you reach the white door. You lose when one camera shoots you.
+ - The door and the button have sensors to detect player collision.
+ - The Camera entity is a Relay which can be deactived by the red button. When the player touches the button, all the cameras are deactivated.
 
 Known bugs: sometimes when the player toss a greande it collides and push him back
 
-Approximate hours: 12 hours
+Approximate hours: 15 hours

@@ -17,8 +17,6 @@ import cs195n.Vec2i;
 
 public class GameScreen extends Screen {
 	
-	private final float ZOOM_FACTOR = 1.1f;
-
 	private Viewport viewport;
 	private MWorld world;
 
@@ -40,6 +38,9 @@ public class GameScreen extends Screen {
 				app.popScreen();
 				app.pushScreen(new EndScreen(app, "You lost!"));
 			}
+			Vec2f viewportDimensions = viewport.getDimensions();
+			Vec2f newPosition = world.getPlayerPosition().minus(viewportDimensions.sdiv(2.0f));
+			viewport.move(newPosition);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -128,12 +129,7 @@ public class GameScreen extends Screen {
 
 	@Override
 	public void onMouseWheelMoved(MouseWheelEvent e) {
-		int rotation = e.getWheelRotation();
-		if (rotation < 0) {
-			viewport.zoomIn(-rotation * ZOOM_FACTOR);
-		} else {
-			viewport.zoomOut(rotation * ZOOM_FACTOR);
-		}
+		
 	}
 
 	@Override
@@ -145,15 +141,16 @@ public class GameScreen extends Screen {
 				world = new MWorld(new Vec2f(windowSize.x, windowSize.y));
 			}
 
+			Vec2f viewportDimensions = new Vec2f(windowSize.x, windowSize.y);
+			Vec2f gamePosition = world.getPlayerPosition().minus(viewportDimensions.sdiv(2.0f));
 			if (viewport != null) {
-				Vec2f gamePosition = viewport.getGamePosition();
 				Vec2f scale = viewport.getScale();
 				viewport = new Viewport(new Vec2f(0.0f, 0.0f), new Vec2f(
 						windowSize.x, windowSize.y), world, scale, gamePosition);
 			} else {
 				viewport = new Viewport(new Vec2f(0.0f, 0.0f), new Vec2f(
 						windowSize.x, windowSize.y), world, new Vec2f(1.0f,
-						1.0f), new Vec2f(0.0f, 0.0f));
+						1.0f), gamePosition);
 			}
 		} catch (NullPointerException e) {
 			System.out.println("No window size defined");

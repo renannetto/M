@@ -95,7 +95,7 @@ public class MWorld extends GameWorld {
 	}
 
 	public void jumpPlayer() {
-		for (CollidableEntity other : collidables) {
+		for (PhysicalEntity other : physEntities) {
 			if (!other.equals(player)) {
 				Collision collision = player.collides(other);
 				if (collision.validCollision() && collision.mtv.y < 0) {
@@ -147,6 +147,10 @@ public class MWorld extends GameWorld {
 	public void addShoot(Bullet shoot) {
 		rays.add(shoot);
 		newEntities.add(shoot);
+	}
+	
+	public Vec2f getPlayerPosition() {
+		return player.getPosition();
 	}
 
 }

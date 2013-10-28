@@ -147,4 +147,12 @@ public class Viewport {
 		return scale;
 	}
 
+	public void move(Vec2f newPosition) {
+		this.gamePosition = newPosition;
+	}
+
+	public Vec2f getDimensions() {
+		return dimensions;
+	}
+
 }
