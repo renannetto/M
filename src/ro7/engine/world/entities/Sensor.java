@@ -9,17 +9,15 @@ import ro7.engine.world.GameWorld;
 import ro7.engine.world.io.Output;
 
 public class Sensor extends CollidableEntity {
-	
-	private Output output;
 
-	public Sensor(GameWorld world, CollidingShape shape, Output output, Map<String, String> properties) {
+	public Sensor(GameWorld world, CollidingShape shape, Map<String, String> properties) {
 		super(world, shape, properties);
-		this.output = output;
+		outputs.put("onCollision", new Output());
 	}
 
 	@Override
 	public void onCollision(Collision collision) {
-		output.run();
+		outputs.get("onCollision").run();
 	}
 
 	@Override

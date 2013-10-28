@@ -20,7 +20,10 @@ import ro7.engine.world.entities.CollidableEntity;
 import ro7.engine.world.entities.Entity;
 import ro7.engine.world.entities.PhysicalEntity;
 import ro7.engine.world.entities.Ray;
+import ro7.engine.world.io.Connection;
+import ro7.engine.world.io.Input;
 import cs195n.LevelData;
+import cs195n.LevelData.ConnectionData;
 import cs195n.LevelData.EntityData;
 import cs195n.LevelData.ShapeData;
 import cs195n.LevelData.ShapeData.Type;
@@ -55,7 +58,6 @@ public abstract class GameWorld {
 	protected Set<Ray> rays;
 	
 	protected Set<String> removeEntities;
-	protected Set<Ray> removeRays;
 
 	protected GameWorld(Vec2f dimensions) {
 		this.dimensions = dimensions;
@@ -64,7 +66,6 @@ public abstract class GameWorld {
 		rays = new HashSet<Ray>();
 		
 		removeEntities = new HashSet<String>();
-		removeRays = new HashSet<Ray>();
 		
 		classes = new HashMap<String, Class<?>>();
 		entities = new HashMap<String, Entity>();
@@ -81,7 +82,7 @@ public abstract class GameWorld {
 			
 			
 			List<? extends ShapeData> shapeDatas = entityData.getShapes();
-			CollidingShape shape;
+			CollidingShape shape = null;
 			if (shapeDatas.size() > 1) {
 				List<CollidingShape> shapes = new ArrayList<CollidingShape>();
 				for (ShapeData shapeData : shapeDatas) {
@@ -89,7 +90,7 @@ public abstract class GameWorld {
 					shapes.add(partShape);
 				}
 				shape = new CompoundShape(shapes.get(0).center(), shapes);
-			} else {
+			} else if (shapeDatas.size() == 1){
 				shape = createShape(shapeDatas.get(0));
 			}
 			Map<String, String> properties = entityData.getProperties();
@@ -119,6 +120,25 @@ public abstract class GameWorld {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+		
+		List<? extends ConnectionData> connectionDatas = level.getConnections();
+		for(ConnectionData connectionData : connectionDatas) {
+			String target = connectionData.getTarget();
+			String targetInput = connectionData.getTargetInput();
+			
+			Entity targetEntity = entities.get(target);
+			Input input = targetEntity.inputs.get(targetInput);
+			
+			Map<String, String> properties = connectionData.getProperties();
+			
+			Connection connection = new Connection(input, properties);
+			
+			String source = connectionData.getSource();
+			String sourceOutput = connectionData.getSourceOutput();
+			
+			Entity sourceEntity = entities.get(source);
+			sourceEntity.connect(sourceOutput, connection);
 		}
 	}
 
@@ -208,11 +228,6 @@ public abstract class GameWorld {
 			entities.remove(entity);
 		}
 		removeEntities.clear();
-		
-		for (Ray ray : removeRays) {
-			rays.remove(ray);
-		}
-		removeRays.clear();
 	}
 
 	public RayCollision getCollided(Ray ray) {
@@ -239,7 +254,7 @@ public abstract class GameWorld {
 	}
 
 	public void removeRay(Ray ray) {
-		removeRays.add(ray);
+		removeEntities.add(ray.toString());
 	}
 
 	public void addCollidableEntity(CollidableEntity entity) {

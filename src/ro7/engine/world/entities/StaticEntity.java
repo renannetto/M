@@ -9,15 +9,16 @@ import cs195n.Vec2f;
 
 public abstract class StaticEntity extends PhysicalEntity {
 
-	protected StaticEntity(GameWorld world, CollidingShape shape, Map<String, String> properties) {
+	protected StaticEntity(GameWorld world, CollidingShape shape,
+			Map<String, String> properties) {
 		super(world, shape, properties);
 	}
 
 	@Override
 	public void applyForce(Vec2f force) {
-		
+
 	}
-	
+
 	@Override
 	public void onCollision(Collision collision) {
 		assert collision.validCollision();
@@ -28,10 +29,14 @@ public abstract class StaticEntity extends PhysicalEntity {
 			mtv = mtv.smult(-1.0f);
 		}
 
-		PhysicalEntity other = (PhysicalEntity) collision.other;
-		other.onCollisionStatic(new Collision(this, mtv.smult(-1.0f), other.shape, this.shape));
+		try {
+			PhysicalEntity other = (PhysicalEntity) collision.other;
+			other.onCollisionStatic(new Collision(this, mtv.smult(-1.0f),
+					other.shape, this.shape));
+		} catch (Exception e) {
+		}
 	}
-	
+
 	@Override
 	public void onCollisionDynamic(Collision collision) {
 		Vec2f mtv = collision.mtv;
@@ -41,7 +46,7 @@ public abstract class StaticEntity extends PhysicalEntity {
 
 		PhysicalEntity other = (PhysicalEntity) collision.other;
 		other.shape.move(mtv.smult(-1.0f));
-		
+
 		mtv = mtv.normalized();
 
 		float cor = this.cor(other);
@@ -53,10 +58,10 @@ public abstract class StaticEntity extends PhysicalEntity {
 
 		other.applyImpulse(mtv.smult(impulse));
 	}
-	
+
 	@Override
 	public void onCollisionStatic(Collision collision) {
-		
+
 	}
 
 }

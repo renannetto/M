@@ -29,9 +29,13 @@ public abstract class DynamicEntity extends PhysicalEntity {
 			mtv = mtv.smult(-1.0f);
 		}
 
-		PhysicalEntity other = (PhysicalEntity) collision.other;
-		other.onCollisionDynamic(new Collision(this, mtv.smult(-1.0f),
-				other.shape, this.shape));
+		try {
+			PhysicalEntity other = (PhysicalEntity) collision.other;
+			other.onCollisionDynamic(new Collision(this, mtv.smult(-1.0f),
+					other.shape, this.shape));
+		} catch (Exception e) {
+
+		}
 	}
 
 	@Override
@@ -68,7 +72,7 @@ public abstract class DynamicEntity extends PhysicalEntity {
 
 		PhysicalEntity other = (PhysicalEntity) collision.other;
 		shape.move(mtv);
-		
+
 		mtv = mtv.normalized();
 
 		float cor = this.cor(other);

@@ -1,6 +1,7 @@
 package ro7.engine.world.entities;
 
 import java.awt.Graphics2D;
+import java.util.Map;
 
 import ro7.engine.sprites.shapes.CollidingShape;
 import ro7.engine.world.GameWorld;
@@ -9,12 +10,11 @@ import ro7.engine.world.io.Output;
 public class Relay extends Entity {
 	
 	private boolean enable;
-	private Output output;
 
-	protected Relay(GameWorld world, CollidingShape shape, Output output) {
+	protected Relay(GameWorld world, CollidingShape shape, Map<String, String> properties) {
 		super(world, shape);
 		enable = false;
-		this.output = output;
+		outputs.put("onSignal", new Output());
 	}
 	
 	public void enable() {
@@ -27,7 +27,7 @@ public class Relay extends Entity {
 	
 	public void runOutput() {
 		if (enable) {
-			output.run();
+			outputs.get("onSignal").run();
 		}
 	}
 

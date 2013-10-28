@@ -8,7 +8,10 @@ import java.util.Set;
 import ro7.engine.world.Collision;
 import ro7.engine.world.GameWorld;
 import ro7.engine.world.entities.CollidableEntity;
+import ro7.engine.world.entities.Entity;
 import ro7.engine.world.entities.PhysicalEntity;
+import ro7.engine.world.entities.Relay;
+import ro7.engine.world.entities.Sensor;
 import cs195n.CS195NLevelReader;
 import cs195n.CS195NLevelReader.InvalidLevelException;
 import cs195n.LevelData;
@@ -20,11 +23,17 @@ public class MWorld extends GameWorld {
 
 	private Player player;
 	
+	private Set<Entity> newEntities;
+	
 	private Set<Bullet> removeShoots;
 	private Set<Grenade> removeGrenades;
+	
+	private boolean won, lost;
 
 	public MWorld(Vec2f dimensions) {
 		super(dimensions);
+		
+		newEntities = new HashSet<Entity>();
 		
 		removeShoots = new HashSet<Bullet>();
 		removeGrenades = new HashSet<Grenade>();
@@ -40,6 +49,9 @@ public class MWorld extends GameWorld {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		won = false;
+		lost = false;
 	}
 	
 	@Override
@@ -47,7 +59,10 @@ public class MWorld extends GameWorld {
 		classes.put("Player", Player.class);
 		classes.put("Enemy", Enemy.class);
 		classes.put("Wall", Wall.class);
-		classes.put("Grenade", Grenade.class);
+		classes.put("Door", Door.class);
+		classes.put("Camera", Camera.class);
+		classes.put("Sensor", Sensor.class);
+		classes.put("Relay", Relay.class);
 	}
 
 	@Override
@@ -57,6 +72,11 @@ public class MWorld extends GameWorld {
 		for (PhysicalEntity entity : physEntities) {
 			entity.applyGravity(GRAVITY);
 		}
+		
+		for (Entity entity : newEntities) {
+			entities.put(entity.toString(), entity);
+		}
+		newEntities.clear();
 		
 		for (Bullet bullet : removeShoots) {
 			rays.remove(bullet);
@@ -87,7 +107,7 @@ public class MWorld extends GameWorld {
 	
 	public void shoot(Vec2f point) {
 		Bullet bullet = player.shoot(point);
-		rays.add(bullet);
+		addShoot(bullet);
 	}
 
 	public void removeShoot(Bullet bullet) {
@@ -102,6 +122,31 @@ public class MWorld extends GameWorld {
 		Grenade grenade = player.tossGrenade();
 		physEntities.add(grenade);
 		collidables.add(grenade);
+	}
+
+	public void win() {
+		won = true;
+	}
+	
+	public boolean won() {
+		return won;
+	}
+	
+	public void lose() {
+		lost = true;
+	}
+	
+	public boolean lost() {
+		return lost;
+	}
+
+	public Collision collidesPlayer(CollidableEntity collidable) {
+		return player.collides(collidable);
+	}
+
+	public void addShoot(Bullet shoot) {
+		rays.add(shoot);
+		newEntities.add(shoot);
 	}
 
 }
