@@ -8,7 +8,7 @@ Engine requirements:
 Game requirements:
  - The camera moves to keep the player on the center.
  - The game is being constructed by reading the file "first_level.nlf" in the levels directory.
- - You win when you reach the white door. You lose when one camera shoots you.
+ - You win when you reach the gray door. You lose when one camera shoots you.
  - The door and the button have sensors to detect player collision.
  - The Camera entity is a Relay which can be deactived by the red button. When the player touches the button, all the cameras are deactivated.
 
