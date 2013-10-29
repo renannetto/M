@@ -134,6 +134,7 @@ public class GameScreen extends Screen {
 
 	@Override
 	public void onResize(Vec2i newSize) {
+		Vec2i oldSize = windowSize;
 		super.onResize(newSize);
 
 		try {
@@ -144,7 +145,8 @@ public class GameScreen extends Screen {
 			Vec2f viewportDimensions = new Vec2f(windowSize.x, windowSize.y);
 			Vec2f gamePosition = world.getPlayerPosition().minus(viewportDimensions.sdiv(2.0f));
 			if (viewport != null) {
-				Vec2f scale = viewport.getScale();
+				Vec2f proportion = new Vec2f((float)newSize.x/oldSize.x, (float)newSize.y/oldSize.y);
+				Vec2f scale = viewport.getScale().pmult(proportion);
 				viewport = new Viewport(new Vec2f(0.0f, 0.0f), new Vec2f(
 						windowSize.x, windowSize.y), world, scale, gamePosition);
 			} else {

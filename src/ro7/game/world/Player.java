@@ -21,7 +21,7 @@ public class Player extends MDynamicEntity {
 
 	private final static float VELOCITY = 100.0f;
 	private final static Vec2f DIMENSIONS = new Vec2f(50.0f, 50.0f);
-	private final float K = 100.0f;
+	private final float K = 300.0f;
 	private final Vec2f JUMP_IMPULSE = new Vec2f(0.0f, -6000.0f);
 
 	private final float DEAD_TIME = 0.2f;

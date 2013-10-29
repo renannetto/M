@@ -56,7 +56,7 @@ public abstract class StaticEntity extends PhysicalEntity {
 
 		float impulse = ma * (1 + cor) * (ub - ua);
 
-		other.applyImpulse(mtv.smult(impulse));
+		other.applyImpulse(mtv.smult(impulse).sdiv(2.0f));
 	}
 
 	@Override

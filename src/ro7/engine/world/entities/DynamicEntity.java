@@ -59,8 +59,8 @@ public abstract class DynamicEntity extends PhysicalEntity {
 
 		float impulse = ((ma * mb * (1 + cor)) / (ma + mb)) * (ub - ua);
 
-		applyImpulse(mtv.smult(impulse));
-		other.applyImpulse(mtv.smult(-impulse));
+		applyImpulse(mtv.smult(impulse).sdiv(2.0f));
+		other.applyImpulse(mtv.smult(-impulse).sdiv(2.0f));
 	}
 
 	@Override
@@ -82,7 +82,7 @@ public abstract class DynamicEntity extends PhysicalEntity {
 
 		float impulse = ma * (1 + cor) * (ub - ua);
 
-		applyImpulse(mtv.smult(impulse));
+		applyImpulse(mtv.smult(impulse).sdiv(2.0f));
 	}
 
 }
