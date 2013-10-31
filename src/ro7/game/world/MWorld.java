@@ -39,7 +39,7 @@ public class MWorld extends GameWorld {
 		removeGrenades = new HashSet<Grenade>();
 		
 		try {
-			LevelData level = CS195NLevelReader.readLevel(new File("levels/first_level.nlf"));
+			LevelData level = CS195NLevelReader.readLevel(new File("levels/sfirst_level.nlf"));
 			initLevel(level);
 			player = (Player)entities.get("player");
 		} catch (FileNotFoundException e) {
