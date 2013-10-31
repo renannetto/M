@@ -38,7 +38,8 @@ public class GameScreen extends Screen {
 				app.popScreen();
 				app.pushScreen(new EndScreen(app, "You lost!"));
 			}
-			Vec2f viewportDimensions = viewport.getDimensions();
+			Vec2f scale = viewport.getScale();
+			Vec2f viewportDimensions = viewport.getDimensions().pdiv(scale);
 			Vec2f newPosition = world.getPlayerPosition().minus(viewportDimensions.sdiv(2.0f));
 			viewport.move(newPosition);
 		} catch (Exception e) {
@@ -148,7 +149,7 @@ public class GameScreen extends Screen {
 				Vec2f proportion = new Vec2f((float)newSize.x/oldSize.x, (float)newSize.y/oldSize.y);
 				Vec2f scale = viewport.getScale().pmult(proportion);
 				viewport = new Viewport(new Vec2f(0.0f, 0.0f), new Vec2f(
-						windowSize.x, windowSize.y), world, scale, gamePosition);
+						newSize.x, newSize.y), world, scale, gamePosition);
 			} else {
 				viewport = new Viewport(new Vec2f(0.0f, 0.0f), new Vec2f(
 						windowSize.x, windowSize.y), world, new Vec2f(1.0f,
