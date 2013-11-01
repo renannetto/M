@@ -17,6 +17,8 @@ public class CollidingSprite extends CollidingShape {
 		super(shape.getPosition());
 		this.sprite = sprite;
 		this.shape = shape;
+		
+		this.shape.changeFillColor(null);
 	}
 
 	@Override
@@ -73,15 +75,23 @@ public class CollidingSprite extends CollidingShape {
 	public List<Vec2f> getPoints() {
 		return this.shape.getPoints();
 	}
+	
+	@Override
+	public void move(Vec2f translation) {
+		super.move(translation);
+		this.shape.move(translation);
+		this.sprite.move(translation);
+	}
 
 	@Override
 	public void updatePoints(Vec2f translation) {
-		this.shape.updatePoints(translation);
+		
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
 		this.sprite.draw(g);
+		this.shape.draw(g);
 	}
 
 }

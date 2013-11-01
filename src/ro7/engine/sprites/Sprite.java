@@ -17,5 +17,9 @@ public abstract class Sprite {
 	 * @param g Graphics object used to draw
 	 */
 	public abstract void draw(Graphics2D g);
+	
+	public void move(Vec2f translation) {
+		position = position.plus(translation);
+	}
 
 }

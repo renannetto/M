@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.Set;
 
+import ro7.engine.sprites.SpriteSheet;
 import ro7.engine.world.Collision;
 import ro7.engine.world.GameWorld;
 import ro7.engine.world.entities.CollidableEntity;
@@ -16,6 +17,7 @@ import cs195n.CS195NLevelReader;
 import cs195n.CS195NLevelReader.InvalidLevelException;
 import cs195n.LevelData;
 import cs195n.Vec2f;
+import cs195n.Vec2i;
 
 public class MWorld extends GameWorld {
 
@@ -39,7 +41,7 @@ public class MWorld extends GameWorld {
 		removeGrenades = new HashSet<Grenade>();
 		
 		try {
-			LevelData level = CS195NLevelReader.readLevel(new File("levels/sfirst_level.nlf"));
+			LevelData level = CS195NLevelReader.readLevel(new File("resources/levels/first_level.nlf"));
 			initLevel(level);
 			player = (Player)entities.get("player");
 		} catch (FileNotFoundException e) {
@@ -63,6 +65,11 @@ public class MWorld extends GameWorld {
 		classes.put("Camera", Camera.class);
 		classes.put("Sensor", Sensor.class);
 		classes.put("Relay", Relay.class);
+	}
+	
+	@Override
+	public void loadSpriteSheets() {
+		spriteSheets.put("samus.png", new SpriteSheet("resources/sprites/samus.png", new Vec2i(36, 50), new Vec2i(16, 0)));
 	}
 
 	@Override

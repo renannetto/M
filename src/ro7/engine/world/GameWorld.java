@@ -11,9 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ro7.engine.sprites.ImageSprite;
+import ro7.engine.sprites.SpriteSheet;
 import ro7.engine.sprites.shapes.AAB;
 import ro7.engine.sprites.shapes.Circle;
 import ro7.engine.sprites.shapes.CollidingShape;
+import ro7.engine.sprites.shapes.CollidingSprite;
 import ro7.engine.sprites.shapes.CompoundShape;
 import ro7.engine.sprites.shapes.Polygon;
 import ro7.engine.world.entities.CollidableEntity;
@@ -28,9 +31,10 @@ import cs195n.LevelData.EntityData;
 import cs195n.LevelData.ShapeData;
 import cs195n.LevelData.ShapeData.Type;
 import cs195n.Vec2f;
+import cs195n.Vec2i;
 
 public abstract class GameWorld {
-	
+
 	private final static Map<String, Color> COLORS;
 	static {
 		COLORS = new HashMap<String, Color>();
@@ -48,15 +52,17 @@ public abstract class GameWorld {
 		COLORS.put("WHITE", Color.WHITE);
 		COLORS.put("YELLOW", Color.YELLOW);
 	}
-	
+
 	protected Map<String, Class<?>> classes;
 	protected Map<String, Entity> entities;
+
+	protected Map<String, SpriteSheet> spriteSheets;
 
 	protected Vec2f dimensions;
 	protected List<CollidableEntity> collidables;
 	protected Set<PhysicalEntity> physEntities;
 	protected Set<Ray> rays;
-	
+
 	protected Set<String> removeEntities;
 
 	protected GameWorld(Vec2f dimensions) {
@@ -64,23 +70,27 @@ public abstract class GameWorld {
 		collidables = new ArrayList<CollidableEntity>();
 		physEntities = new HashSet<PhysicalEntity>();
 		rays = new HashSet<Ray>();
-		
+
 		removeEntities = new HashSet<String>();
-		
+
 		classes = new HashMap<String, Class<?>>();
 		entities = new HashMap<String, Entity>();
 		setGameClasses();
+
+		spriteSheets = new HashMap<String, SpriteSheet>();
+		loadSpriteSheets();
 	}
-	
+
 	public abstract void setGameClasses();
-	
+
+	public abstract void loadSpriteSheets();
+
 	public void initLevel(LevelData level) {
 		List<? extends EntityData> entitiesDatas = level.getEntities();
 		for (EntityData entityData : entitiesDatas) {
 			String entityClassName = entityData.getEntityClass();
 			Class<?> entityClass = classes.get(entityClassName);
-			
-			
+
 			List<? extends ShapeData> shapeDatas = entityData.getShapes();
 			CollidingShape shape = null;
 			if (shapeDatas.size() > 1) {
@@ -90,15 +100,30 @@ public abstract class GameWorld {
 					shapes.add(partShape);
 				}
 				shape = new CompoundShape(shapes.get(0).center(), shapes);
-			} else if (shapeDatas.size() == 1){
+			} else if (shapeDatas.size() == 1) {
 				shape = createShape(shapeDatas.get(0));
 			}
 			Map<String, String> properties = entityData.getProperties();
-			
+
+			if (properties.containsKey("spriteSheet")) {
+				SpriteSheet sheet = spriteSheets.get(properties
+						.get("spriteSheet"));
+				Vec2i sheetPosition = new Vec2i(Integer.parseInt(properties
+						.get("spritePosX")), Integer.parseInt(properties
+						.get("spritePosY")));
+				Vec2f position = shape.getPosition();
+				ImageSprite sprite = new ImageSprite(position, sheet,
+						sheetPosition);
+				CollidingShape colShape = shape;
+				shape = new CollidingSprite(sprite, colShape);
+			}
+
 			Constructor<?> constructor;
 			try {
-				constructor = entityClass.getConstructor(GameWorld.class, CollidingShape.class, Map.class);
-				Entity entity = (Entity)constructor.newInstance(this, shape, properties);
+				constructor = entityClass.getConstructor(GameWorld.class,
+						CollidingShape.class, Map.class);
+				Entity entity = (Entity) constructor.newInstance(this, shape,
+						properties);
 				String entityName = entityData.getName();
 				entities.put(entityName, entity);
 			} catch (NoSuchMethodException e) {
@@ -121,22 +146,22 @@ public abstract class GameWorld {
 				e.printStackTrace();
 			}
 		}
-		
+
 		List<? extends ConnectionData> connectionDatas = level.getConnections();
-		for(ConnectionData connectionData : connectionDatas) {
+		for (ConnectionData connectionData : connectionDatas) {
 			String target = connectionData.getTarget();
 			String targetInput = connectionData.getTargetInput();
-			
+
 			Entity targetEntity = entities.get(target);
 			Input input = targetEntity.inputs.get(targetInput);
-			
+
 			Map<String, String> properties = connectionData.getProperties();
-			
+
 			Connection connection = new Connection(input, properties);
-			
+
 			String source = connectionData.getSource();
 			String sourceOutput = connectionData.getSourceOutput();
-			
+
 			Entity sourceEntity = entities.get(source);
 			sourceEntity.connect(sourceOutput, connection);
 		}
@@ -144,11 +169,11 @@ public abstract class GameWorld {
 
 	private CollidingShape createShape(ShapeData shapeData) {
 		CollidingShape shape = null;
-		
+
 		Type type = shapeData.getType();
 		Vec2f center = shapeData.getCenter();
 		Map<String, String> properties = shapeData.getProperties();
-		
+
 		String colorString = properties.get("color");
 		Color color;
 		if (COLORS.containsKey(colorString)) {
@@ -156,14 +181,15 @@ public abstract class GameWorld {
 		} else {
 			color = Color.decode(colorString);
 		}
-		
+
 		switch (type) {
 		case CIRCLE:
 			float radius = shapeData.getRadius();
 			shape = new Circle(center, color, color, radius);
 			break;
 		case BOX:
-			Vec2f dimensions = new Vec2f(shapeData.getWidth(), shapeData.getHeight());
+			Vec2f dimensions = new Vec2f(shapeData.getWidth(),
+					shapeData.getHeight());
 			shape = new AAB(center, color, color, dimensions);
 			break;
 		case POLY:
@@ -223,7 +249,7 @@ public abstract class GameWorld {
 				ray.updateShape(closest.point);
 			}
 		}
-		
+
 		for (String entity : removeEntities) {
 			entities.remove(entity);
 		}
@@ -260,7 +286,7 @@ public abstract class GameWorld {
 	public void addCollidableEntity(CollidableEntity entity) {
 		collidables.add(entity);
 	}
-	
+
 	public void addPhysicalEntity(PhysicalEntity entity) {
 		physEntities.add(entity);
 	}

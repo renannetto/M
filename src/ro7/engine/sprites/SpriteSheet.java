@@ -37,7 +37,16 @@ public class SpriteSheet {
 		int x = (sheetPosition.x*frameDimensions.x) + ((sheetPosition.x+1)*padding.x);
 		int y = (sheetPosition.y*frameDimensions.y) + ((sheetPosition.y+1)*padding.y);
 		BufferedImage subImage = sheet.getSubimage(x, y, frameDimensions.x, frameDimensions.y);
-		g.drawImage(subImage, (int)position.x, (int)position.y, null);
+		Vec2i topLeft = new Vec2i((int)(position.x-frameDimensions.x/2.0f), (int)(position.y-frameDimensions.y/2.0f));
+		g.drawImage(subImage, topLeft.x, topLeft.y, null);
 	}
+	
+//	public void draw(Graphics2D g, Vec2i sheetPosition, Vec2f position, Vec2f dimensions) {
+//		int x = (sheetPosition.x*frameDimensions.x) + ((sheetPosition.x+1)*padding.x);
+//		int y = (sheetPosition.y*frameDimensions.y) + ((sheetPosition.y+1)*padding.y);
+//		BufferedImage subImage = sheet.getSubimage(x, y, frameDimensions.x, frameDimensions.y);
+//		Vec2i topLeft = new Vec2i((int)(position.x-frameDimensions.x/2.0f), (int)(position.y-frameDimensions.y/2.0f));
+//		g.drawImage(subImage, topLeft.x, topLeft.y, (int)dimensions.x, (int)dimensions.y, null);
+//	}
 
 }

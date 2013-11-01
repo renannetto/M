@@ -14,7 +14,7 @@ public class ImageSprite extends Sprite {
 	protected SpriteSheet sheet;
 	protected Vec2i sheetPosition; 
 
-	protected ImageSprite(Vec2f position, SpriteSheet sheet, Vec2i sheetPosition) {
+	public ImageSprite(Vec2f position, SpriteSheet sheet, Vec2i sheetPosition) {
 		super(position);
 		this.sheet = sheet;
 		this.sheetPosition = sheetPosition;
@@ -24,5 +24,9 @@ public class ImageSprite extends Sprite {
 	public void draw(Graphics2D g) {
 		sheet.draw(g, sheetPosition, position);
 	}
+	
+//	public void draw(Graphics2D g, Vec2f dimensions) {
+//		sheet.draw(g, sheetPosition, position, dimensions);
+//	}
 
 }
