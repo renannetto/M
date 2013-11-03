@@ -25,8 +25,8 @@ public class ImageSprite extends Sprite {
 		sheet.draw(g, sheetPosition, position);
 	}
 	
-//	public void draw(Graphics2D g, Vec2f dimensions) {
-//		sheet.draw(g, sheetPosition, position, dimensions);
-//	}
+	public void draw(Graphics2D g, Vec2f dimensions) {
+		sheet.draw(g, sheetPosition, position, dimensions);
+	}
 
 }

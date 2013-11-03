@@ -90,8 +90,23 @@ public class CollidingSprite extends CollidingShape {
 
 	@Override
 	public void draw(Graphics2D g) {
-		this.sprite.draw(g);
-		this.shape.draw(g);
+		this.sprite.draw(g, shape.getDimensions());
+	}
+	
+	@Override
+	public void update(long nanoseconds) {
+		super.update(nanoseconds);
+		this.sprite.update(nanoseconds);
+	}
+
+	public void updateSprite(ImageSprite sprite) {
+		this.sprite = sprite;
+		this.sprite.moveTo(shape.getPosition());
+	}
+
+	@Override
+	public Vec2f getDimensions() {
+		return shape.getDimensions();
 	}
 
 }

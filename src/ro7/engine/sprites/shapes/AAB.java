@@ -150,6 +150,7 @@ public class AAB extends EdgeShape {
 		}
 	}
 
+	@Override
 	public Vec2f getDimensions() {
 		return dimensions;
 	}

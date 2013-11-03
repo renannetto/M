@@ -9,9 +9,9 @@ import cs195n.Vec2f;
 
 public abstract class DynamicEntity extends PhysicalEntity {
 
-	protected DynamicEntity(GameWorld world, CollidingShape shape,
+	protected DynamicEntity(GameWorld world, CollidingShape shape, String name,
 			Map<String, String> properties) {
-		super(world, shape, properties);
+		super(world, shape, name, properties);
 	}
 
 	@Override

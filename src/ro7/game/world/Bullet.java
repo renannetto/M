@@ -9,8 +9,8 @@ public class Bullet extends Ray {
 	
 	private final float SHOOT_IMPULSE = 500;
 
-	public Bullet(GameWorld world, int groupIndex, Vec2f position, Vec2f direction) {
-		super(world, groupIndex, position, direction);
+	public Bullet(GameWorld world, int categoryMask, int collisionMask, Vec2f position, Vec2f direction) {
+		super(world, categoryMask, collisionMask, position, direction);
 	}
 
 	@Override

@@ -15,8 +15,8 @@ public abstract class PhysicalEntity extends CollidableEntity {
 	protected Vec2f force;
 	protected float restitution;
 
-	protected PhysicalEntity(GameWorld world, CollidingShape shape, Map<String, String> properties) {
-		super(world, shape, properties);
+	protected PhysicalEntity(GameWorld world, CollidingShape shape, String name, Map<String, String> properties) {
+		super(world, shape, name, properties);
 		this.mass = Float.parseFloat(properties.get("mass"));
 		this.velocity = new Vec2f(Float.parseFloat(properties.get("velocityX")), Float.parseFloat(properties.get("velocityY")));
 		this.force = new Vec2f(0.0f, 0.0f);
@@ -66,6 +66,12 @@ public abstract class PhysicalEntity extends CollidableEntity {
 
 	public float cor(PhysicalEntity other) {
 		return (float) Math.sqrt(restitution * other.restitution);
+	}
+	
+	@Override
+	public void remove() {
+		super.remove();
+		world.removePhysicalEntity(this);
 	}
 
 }

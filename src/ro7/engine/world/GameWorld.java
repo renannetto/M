@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ro7.engine.sprites.AnimatedSprite;
 import ro7.engine.sprites.ImageSprite;
 import ro7.engine.sprites.SpriteSheet;
 import ro7.engine.sprites.shapes.AAB;
@@ -90,6 +91,7 @@ public abstract class GameWorld {
 		for (EntityData entityData : entitiesDatas) {
 			String entityClassName = entityData.getEntityClass();
 			Class<?> entityClass = classes.get(entityClassName);
+			String entityName = entityData.getName();
 
 			List<? extends ShapeData> shapeDatas = entityData.getShapes();
 			CollidingShape shape = null;
@@ -105,26 +107,12 @@ public abstract class GameWorld {
 			}
 			Map<String, String> properties = entityData.getProperties();
 
-			if (properties.containsKey("spriteSheet")) {
-				SpriteSheet sheet = spriteSheets.get(properties
-						.get("spriteSheet"));
-				Vec2i sheetPosition = new Vec2i(Integer.parseInt(properties
-						.get("spritePosX")), Integer.parseInt(properties
-						.get("spritePosY")));
-				Vec2f position = shape.getPosition();
-				ImageSprite sprite = new ImageSprite(position, sheet,
-						sheetPosition);
-				CollidingShape colShape = shape;
-				shape = new CollidingSprite(sprite, colShape);
-			}
-
 			Constructor<?> constructor;
 			try {
 				constructor = entityClass.getConstructor(GameWorld.class,
-						CollidingShape.class, Map.class);
-				Entity entity = (Entity) constructor.newInstance(this, shape,
+						CollidingShape.class, String.class, Map.class);
+				Entity entity = (Entity) constructor.newInstance(this, shape, entityName,
 						properties);
-				String entityName = entityData.getName();
 				entities.put(entityName, entity);
 			} catch (NoSuchMethodException e) {
 				// TODO Auto-generated catch block
@@ -197,6 +185,30 @@ public abstract class GameWorld {
 			shape = new Polygon(center, color, points);
 			break;
 		}
+		
+		if (!properties.containsKey("spriteSheet")) {
+			return shape;
+		}
+		
+		SpriteSheet sheet = spriteSheets.get(properties
+				.get("spriteSheet"));
+		Vec2i sheetPosition = new Vec2i(Integer.parseInt(properties
+				.get("spritePosX")), Integer.parseInt(properties
+				.get("spritePosY")));
+		Vec2f position = shape.getPosition();
+		
+		ImageSprite sprite;
+		if (properties.containsKey("frames")) {
+			int frames = Integer.parseInt(properties.get("frames"));
+			int timeToMove = Integer.parseInt(properties.get("timeToMove"));
+			sprite = new AnimatedSprite(position, sheet, sheetPosition, frames, timeToMove);
+		} else {
+			sprite = new ImageSprite(position, sheet,
+					sheetPosition);
+		}
+		CollidingShape colShape = shape;
+		shape = new CollidingSprite(sprite, colShape);
+		
 		return shape;
 	}
 
@@ -216,9 +228,6 @@ public abstract class GameWorld {
 		for (Entity entity : entities.values()) {
 			entity.draw(g);
 		}
-		for (CollidableEntity collidable : collidables) {
-			collidable.draw(g);
-		}
 		for (Ray ray : rays) {
 			ray.draw(g);
 		}
@@ -227,9 +236,6 @@ public abstract class GameWorld {
 	public void update(long nanoseconds) {
 		for (Entity entity : entities.values()) {
 			entity.update(nanoseconds);
-		}
-		for (CollidableEntity collidable : collidables) {
-			collidable.update(nanoseconds);
 		}
 		for (CollidableEntity collidableA : collidables) {
 			for (CollidableEntity collidableB : collidables) {
@@ -251,6 +257,7 @@ public abstract class GameWorld {
 		}
 
 		for (String entity : removeEntities) {
+			entities.get(entity).remove();
 			entities.remove(entity);
 		}
 		removeEntities.clear();
@@ -286,9 +293,25 @@ public abstract class GameWorld {
 	public void addCollidableEntity(CollidableEntity entity) {
 		collidables.add(entity);
 	}
+	
+	public void removeCollidableEntity(CollidableEntity entity) {
+		collidables.remove(entity);
+	}
 
 	public void addPhysicalEntity(PhysicalEntity entity) {
 		physEntities.add(entity);
+	}
+	
+	public void removePhysicalEntity(PhysicalEntity entity) {
+		physEntities.remove(entity);
+	}
+
+	public SpriteSheet getSpriteSheet(String sheet) {
+		return spriteSheets.get(sheet);
+	}
+	
+	public void removeEntity(String entityName) {
+		removeEntities.add(entityName);
 	}
 
 }

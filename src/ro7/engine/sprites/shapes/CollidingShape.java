@@ -69,5 +69,7 @@ public abstract class CollidingShape extends Sprite {
 	}
 
 	public abstract void updatePoints(Vec2f translation);
+	
+	public abstract Vec2f getDimensions();
 
 }

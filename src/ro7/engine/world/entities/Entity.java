@@ -14,12 +14,14 @@ public abstract class Entity {
 	
 	protected GameWorld world;
 	protected CollidingShape shape;
+	protected String name;
 	protected Map<String, Output> outputs;
 	public Map<String, Input> inputs;
 	
-	protected Entity(GameWorld world, CollidingShape shape) {
+	protected Entity(GameWorld world, CollidingShape shape, String name) {
 		this.world = world;
 		this.shape = shape;
+		this.name = name;
 		this.outputs = new HashMap<String, Output>();
 		this.inputs = new HashMap<String, Input>();
 	}
@@ -31,5 +33,7 @@ public abstract class Entity {
 	public void connect(String output, Connection connection) {
 		outputs.get(output).connect(connection);
 	}
+	
+	public abstract void remove();
 
 }

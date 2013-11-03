@@ -11,8 +11,8 @@ public class Relay extends Entity {
 	
 	private boolean enable;
 
-	protected Relay(GameWorld world, CollidingShape shape, Map<String, String> properties) {
-		super(world, shape);
+	protected Relay(GameWorld world, CollidingShape shape, String name, Map<String, String> properties) {
+		super(world, shape, name);
 		enable = false;
 		outputs.put("onSignal", new Output());
 	}
@@ -41,6 +41,12 @@ public class Relay extends Entity {
 	public void draw(Graphics2D g) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	@Override
+	public void remove() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

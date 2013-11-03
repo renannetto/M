@@ -21,14 +21,13 @@ import cs195n.Vec2i;
 
 public class MWorld extends GameWorld {
 
-	private final Vec2f GRAVITY = new Vec2f(0.0f, 100.0f);
+	private Vec2f GRAVITY = new Vec2f(0.0f, 100.0f);
 
 	private Player player;
 	
 	private Set<Entity> newEntities;
 	
 	private Set<Bullet> removeShoots;
-	private Set<Grenade> removeGrenades;
 	
 	private boolean won, lost;
 
@@ -38,7 +37,6 @@ public class MWorld extends GameWorld {
 		newEntities = new HashSet<Entity>();
 		
 		removeShoots = new HashSet<Bullet>();
-		removeGrenades = new HashSet<Grenade>();
 		
 		try {
 			LevelData level = CS195NLevelReader.readLevel(new File("resources/levels/first_level.nlf"));
@@ -59,17 +57,27 @@ public class MWorld extends GameWorld {
 	@Override
 	public void setGameClasses() {
 		classes.put("Player", Player.class);
-		classes.put("Enemy", Enemy.class);
+		classes.put("GroundEnemy", GroundEnemy.class);
+		classes.put("AirEnemy", AirEnemy.class);
+		classes.put("ReverseButton", ReverseButton.class);
 		classes.put("Wall", Wall.class);
 		classes.put("Door", Door.class);
-		classes.put("Camera", Camera.class);
 		classes.put("Sensor", Sensor.class);
 		classes.put("Relay", Relay.class);
 	}
 	
 	@Override
 	public void loadSpriteSheets() {
-		spriteSheets.put("samus.png", new SpriteSheet("resources/sprites/samus.png", new Vec2i(36, 50), new Vec2i(16, 0)));
+		spriteSheets.put("samus.png", new SpriteSheet("resources/sprites/samus.png", new Vec2i(36, 50), new Vec2i(14, 0)));
+		spriteSheets.put("samus_walking_right.png", new SpriteSheet("resources/sprites/samus_walking_right.png", new Vec2i(36, 50), new Vec2i(14, 0)));
+		spriteSheets.put("samus_walking_left.png", new SpriteSheet("resources/sprites/samus_walking_left.png", new Vec2i(36, 50), new Vec2i(14, 0)));
+		spriteSheets.put("ground_enemy.png", new SpriteSheet("resources/sprites/ground_enemy.png", new Vec2i(80, 100), new Vec2i(15, 0)));
+		spriteSheets.put("ground_enemy_right.png", new SpriteSheet("resources/sprites/ground_enemy_right.png", new Vec2i(80, 100), new Vec2i(15, 0)));
+		spriteSheets.put("ground_enemy_left.png", new SpriteSheet("resources/sprites/ground_enemy_left.png", new Vec2i(80, 100), new Vec2i(15, 0)));
+		spriteSheets.put("air_enemy.png", new SpriteSheet("resources/sprites/air_enemy.png", new Vec2i(50, 50), new Vec2i(0, 0)));
+		spriteSheets.put("wall.png", new SpriteSheet("resources/sprites/wall.png", new Vec2i(16, 16), new Vec2i(0, 0)));
+		spriteSheets.put("door.png", new SpriteSheet("resources/sprites/door.png", new Vec2i(32, 48), new Vec2i(0, 0)));
+		spriteSheets.put("objects.png", new SpriteSheet("resources/sprites/objects.png", new Vec2i(32, 32), new Vec2i(0, 0)));
 	}
 
 	@Override
@@ -89,12 +97,6 @@ public class MWorld extends GameWorld {
 			rays.remove(bullet);
 		}
 		removeShoots.clear();
-		
-		for (Grenade grenade : removeGrenades) {
-			physEntities.remove(grenade);
-			collidables.remove(collidables.indexOf(grenade));
-		}
-		removeGrenades.clear();
 	}
 
 	public void movePlayer(Vec2f direction) {
@@ -120,15 +122,10 @@ public class MWorld extends GameWorld {
 	public void removeShoot(Bullet bullet) {
 		removeShoots.add(bullet);
 	}
-	
-	public void removeGrenade(Grenade grenade) {
-		removeGrenades.add(grenade);
-	}
 
-	public void tossGrenade() {
-		Grenade grenade = player.tossGrenade();
-		physEntities.add(grenade);
-		collidables.add(grenade);
+	public void tossGrenade(Vec2f point) {
+		Grenade grenade = player.tossGrenade(point);
+		entities.put(grenade.toString(), grenade);
 	}
 
 	public void win() {
@@ -158,6 +155,10 @@ public class MWorld extends GameWorld {
 	
 	public Vec2f getPlayerPosition() {
 		return player.getPosition();
+	}
+
+	public void reverseGravity() {
+		GRAVITY = GRAVITY.smult(-1.0f);
 	}
 
 }

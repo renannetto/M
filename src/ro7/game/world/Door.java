@@ -9,8 +9,8 @@ import ro7.engine.world.entities.Entity;
 
 public class Door extends Entity {
 
-	public Door(GameWorld world, CollidingShape shape, Map<String, String> properties) {
-		super(world, shape);
+	public Door(GameWorld world, CollidingShape shape, String name, Map<String, String> properties) {
+		super(world, shape, name);
 	}
 
 	@Override
@@ -22,6 +22,12 @@ public class Door extends Entity {
 	@Override
 	public void draw(Graphics2D g) {
 		shape.draw(g);
+	}
+	
+	@Override
+	public void remove() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

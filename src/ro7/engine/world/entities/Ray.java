@@ -23,9 +23,9 @@ public abstract class Ray extends GroupEntity {
 	protected Line sprite;
 	protected float elapsedTime;
 
-	protected Ray(GameWorld world, int groupIndex, Vec2f position,
+	protected Ray(GameWorld world, int categoryMask, int collisionMask, Vec2f position,
 			Vec2f direction) {
-		super(world, groupIndex);
+		super(world, categoryMask, collisionMask);
 		this.position = position;
 		this.direction = direction.normalized();
 		elapsedTime = 0;
@@ -101,5 +101,11 @@ public abstract class Ray extends GroupEntity {
 	}
 
 	public abstract void onCollision(RayCollision collision);
+	
+	@Override
+	public void remove() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

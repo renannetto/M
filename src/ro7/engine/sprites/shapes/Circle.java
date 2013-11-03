@@ -20,13 +20,13 @@ public class Circle extends SingleShape {
 
 	public Circle(Vec2f position, Color borderColor, Color fillColor,
 			float radius) {
-		super(position.minus(radius, radius), borderColor, fillColor);
+		super(position, borderColor, fillColor);
 		this.radius = radius;
 	}
 
 	@Override
 	public Vec2f center() {
-		return new Vec2f(position.x + radius, position.y + radius);
+		return position;
 	}
 
 	public float getRadius() {
@@ -61,7 +61,8 @@ public class Circle extends SingleShape {
 	@Override
 	public Vec2f collidesAAB(AAB aab) {
 		Vec2f center = this.center();
-		Vec2f minAAB = aab.getPosition();
+		Vec2f aabDimensions = aab.getDimensions();
+		Vec2f minAAB = aab.getPosition().minus(aabDimensions.sdiv(2.0f));
 		Vec2f maxAAB = minAAB.plus(aab.getDimensions());
 
 		float pointx;
@@ -160,7 +161,7 @@ public class Circle extends SingleShape {
 	
 	@Override
 	public void draw(Graphics2D g) {
-		Ellipse2D circle = new Ellipse2D.Float(position.x, position.y,
+		Ellipse2D circle = new Ellipse2D.Float(position.x-radius, position.y-radius,
 				2.0f * radius, 2.0f * radius);
 
 		g.setColor(borderColor);
@@ -191,6 +192,11 @@ public class Circle extends SingleShape {
 	public void updatePoints(Vec2f translation) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Vec2f getDimensions() {
+		return new Vec2f(2*radius, 2*radius);
 	}
 
 }

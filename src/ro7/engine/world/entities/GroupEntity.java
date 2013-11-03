@@ -7,26 +7,24 @@ import ro7.engine.world.GameWorld;
 
 public abstract class GroupEntity extends Entity {
 	
-	protected int groupIndex;
+	protected int categoryMask;
+	protected int collisionMask;
 
-	protected GroupEntity(GameWorld world, CollidingShape shape, Map<String, String> properties) {
-		super(world, shape);
-		this.groupIndex = Integer.parseInt(properties.get("groupIndex"));
+	protected GroupEntity(GameWorld world, CollidingShape shape, String name, Map<String, String> properties) {
+		super(world, shape, name);
+		this.categoryMask = Integer.parseInt(properties.get("categoryMask"));
+		this.collisionMask = Integer.parseInt(properties.get("collisionMask"));
 	}
 	
-	protected GroupEntity(GameWorld world, int groupIndex) {
-		super(world, null);
-		this.groupIndex = groupIndex;
+	protected GroupEntity(GameWorld world, int categoryMask, int collisionMask) {
+		super(world, null, null);
+		this.name = toString();
+		this.categoryMask = categoryMask;
+		this.collisionMask = collisionMask;
 	}
 	
 	public boolean collidable(GroupEntity other) {
-		if (this.groupIndex != other.groupIndex) {
-			return true;
-		}
-		if (this.groupIndex > 0 && other.groupIndex > 0) {
-			return true;
-		}
-		return false;
+		return (this.categoryMask & other.collisionMask) != 0;
 	}
 
 }

@@ -11,8 +11,8 @@ import cs195n.Vec2f;
 
 public abstract class CollidableEntity extends GroupEntity {
 	
-	protected CollidableEntity(GameWorld world, CollidingShape shape, Map<String, String> properties) {
-		super(world, shape, properties);
+	protected CollidableEntity(GameWorld world, CollidingShape shape, String name, Map<String, String> properties) {
+		super(world, shape, name, properties);
 		world.addCollidableEntity(this);
 	}
 	
@@ -31,6 +31,11 @@ public abstract class CollidableEntity extends GroupEntity {
 	@Override
 	public void draw(Graphics2D g) {
 		shape.draw(g);
+	}
+	
+	@Override
+	public void remove() {
+		world.removeCollidableEntity(this);
 	}
 
 }

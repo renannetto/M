@@ -9,9 +9,9 @@ import cs195n.Vec2f;
 
 public abstract class StaticEntity extends PhysicalEntity {
 
-	protected StaticEntity(GameWorld world, CollidingShape shape,
+	protected StaticEntity(GameWorld world, CollidingShape shape, String name,
 			Map<String, String> properties) {
-		super(world, shape, properties);
+		super(world, shape, name, properties);
 	}
 
 	@Override

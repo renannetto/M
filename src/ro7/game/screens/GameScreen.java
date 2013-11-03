@@ -65,8 +65,6 @@ public class GameScreen extends Screen {
 		case 65:
 			world.movePlayer(new Vec2f(-1.0f, 0.0f));
 			break;
-		case 71:
-			world.tossGrenade();
 		case 87:
 			if (!pressedKeys.contains(keyCode)) {
 				world.jumpPlayer();
@@ -107,7 +105,9 @@ public class GameScreen extends Screen {
 		Vec2f gamePosition = viewport.screenToGame(new Vec2f(point.x, point.y));
 		if (button == 1) {
 			world.shoot(gamePosition);
-		} 
+		} else if (button == 3) {
+			world.tossGrenade(gamePosition);
+		}
 	}
 
 	@Override
@@ -156,7 +156,8 @@ public class GameScreen extends Screen {
 						1.0f), gamePosition);
 			}
 		} catch (NullPointerException e) {
-			System.out.println("No window size defined");
+			//System.out.println("No window size defined");
+			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

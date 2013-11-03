@@ -10,8 +10,8 @@ import ro7.engine.world.io.Output;
 
 public class Sensor extends CollidableEntity {
 
-	public Sensor(GameWorld world, CollidingShape shape, Map<String, String> properties) {
-		super(world, shape, properties);
+	public Sensor(GameWorld world, CollidingShape shape, String name, Map<String, String> properties) {
+		super(world, shape, name, properties);
 		outputs.put("onCollision", new Output());
 	}
 

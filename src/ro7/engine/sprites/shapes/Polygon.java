@@ -144,5 +144,29 @@ public class Polygon extends EdgeShape {
 		}
 		points = newPoints;
 	}
+	
+	@Override
+	public Vec2f getDimensions() {
+		float minX = Float.MAX_VALUE;
+		float maxX = -Float.MAX_VALUE;
+		float minY = Float.MAX_VALUE;
+		float maxY = -Float.MAX_VALUE;
+		List<Vec2f> points = getPoints();
+		for (Vec2f point : points) {
+			if (point.x < minX) {
+				minX = point.x;
+			}
+			if (point.x > maxX) {
+				maxX = point.x;
+			}
+			if (point.y < minY) {
+				minY = point.y;
+			}
+			if (point.y > maxY) {
+				maxY = point.y;
+			}
+		}
+		return new Vec2f(maxX-minX, maxY-minY);
+	}
 
 }

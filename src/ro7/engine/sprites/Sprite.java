@@ -18,8 +18,16 @@ public abstract class Sprite {
 	 */
 	public abstract void draw(Graphics2D g);
 	
+	public void update(long nanoseconds) {
+		
+	}
+	
 	public void move(Vec2f translation) {
 		position = position.plus(translation);
+	}
+	
+	public void moveTo(Vec2f position) {
+		this.position = position;
 	}
 
 }

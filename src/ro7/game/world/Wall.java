@@ -7,8 +7,8 @@ import ro7.engine.world.GameWorld;
 
 public class Wall extends MStaticEntity {
 
-	public Wall(GameWorld world, CollidingShape shape, Map<String, String> properties) {
-		super(world, shape, properties);
+	public Wall(GameWorld world, CollidingShape shape, String name, Map<String, String> properties) {
+		super(world, shape, name, properties);
 	}
 
 }
