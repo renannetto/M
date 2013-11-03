@@ -49,6 +49,13 @@ public class Player extends MDynamicEntity {
 				((MWorld) world).win();
 			}
 		});
+		inputs.put("doDie", new Input() {
+			
+			@Override
+			public void run(Map<String, String> args) {
+				die();
+			}
+		});
 
 		SpriteSheet standingSheet = world.getSpriteSheet(properties
 				.get("standingSheet"));
@@ -162,6 +169,10 @@ public class Player extends MDynamicEntity {
 
 	public Vec2f getPosition() {
 		return shape.center();
+	}
+	
+	public void die() {
+		deadTime = DEAD_TIME;
 	}
 
 }
