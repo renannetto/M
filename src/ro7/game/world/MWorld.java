@@ -60,6 +60,7 @@ public class MWorld extends GameWorld {
 		classes.put("GroundEnemy", GroundEnemy.class);
 		classes.put("AirEnemy", AirEnemy.class);
 		classes.put("ReverseButton", ReverseButton.class);
+		classes.put("Box", Box.class);
 		classes.put("Wall", Wall.class);
 		classes.put("Door", Door.class);
 		classes.put("Sensor", Sensor.class);

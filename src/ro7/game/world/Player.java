@@ -27,7 +27,6 @@ public class Player extends MDynamicEntity {
 	private final int BULLET_COLLISION = 2;
 
 	private final static float VELOCITY = 200.0f;
-	private final static Vec2f DIMENSIONS = new Vec2f(50.0f, 50.0f);
 	private final float K = 300.0f;
 	private final Vec2f JUMP_IMPULSE = new Vec2f(0.0f, -8000.0f);
 
@@ -123,26 +122,13 @@ public class Player extends MDynamicEntity {
 	public Bullet shoot(Vec2f point) {
 		Vec2f position = shape.getPosition();
 		Vec2f direction = point.minus(position).normalized();
-
-		Vec2f bulletPosition = shape.center();
-		if (direction.x > 0) {
-			bulletPosition = bulletPosition.plus(DIMENSIONS.x / 2.0f, 0.0f);
-		} else {
-			bulletPosition = bulletPosition.plus(-DIMENSIONS.x / 2.0f, 0.0f);
-		}
-		return new Bullet(world, BULLET_MASK, BULLET_COLLISION, bulletPosition,
+		return new Bullet(world, BULLET_MASK, BULLET_COLLISION, position,
 				direction);
 	}
 
 	public Grenade tossGrenade(Vec2f point) {
 		Vec2f position = shape.getPosition();
 		Vec2f direction = point.minus(position).normalized();
-		Vec2f grenadePosition;
-		if (direction.x > 0) {
-			grenadePosition = position.plus(DIMENSIONS.x + 10.0f, -10.0f);
-		} else {
-			grenadePosition = position.plus(-10.0f, -10.0f);
-		}
 
 		Map<String, String> properties = new HashMap<String, String>();
 		properties.put("mass", GRENADE_MASS);
@@ -152,7 +138,7 @@ public class Player extends MDynamicEntity {
 		properties.put("categoryMask", GRENADE_MASK);
 		properties.put("collisionMask", GRENADE_COLLISION);
 
-		return new Grenade(world, properties, grenadePosition);
+		return new Grenade(world, properties, position);
 	}
 
 	@Override

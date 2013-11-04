@@ -1,17 +1,12 @@
-M 2 README
-
-Engine requirements:
- - Entity I/O: the package ro7.engine.world.io contains three classes: Ouptut, Connection and Input, which allow games to define connections between entities.
- - Standard entities: the package ro7.engine.world.entities contains Sensor and Relay classes, which represent those standard entities.
- - Read levels from files: the GameWorld class in ro7.engine.world contains a readLevel method which read data from a level data created by the TA level editor. To use it, it is necessary to override the method setGameClasses, which creates a mapping from Strings to available Entity classes.
+M 4 README
 
 Game requirements:
- - The camera moves to keep the player on the center.
- - The game is being constructed by reading the file "first_level.nlf" in the levels directory.
- - You win when you reach the gray door. You lose when one camera shoots you.
- - The door and the button have sensors to detect player collision.
- - The Camera entity is a Relay which can be deactived by the red button. When the player touches the button, all the cameras are deactivated.
+ - It is possible to start a new game by pressing r.
+ - There are 14 I/O connections on the game.
+ - There are two types of enemies: ground enemies which are killed using grenades and air enemies which are killed by shooting them.
+ - There are buttons on the wall that revert the gravity.
+ - All objects are being drawn using sprites.
+ - All movable entities (player and enemies) use animated sprites.
+ - There are two boxes which can be broken using grenades.
 
-Known bugs: sometimes when the player toss a greande it collides and push him back
-
-Approximate hours: 15 hours
+Approximate hours: 12 hours

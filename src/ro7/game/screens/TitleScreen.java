@@ -47,7 +47,11 @@ public class TitleScreen extends Screen {
 	public void onKeyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 		if (keyCode == 10) {
-			app.pushScreen(new GameScreen(app));
+			try {
+				app.pushScreen(new GameScreen(app));
+			} catch (Exception exception) {
+				System.out.println("Failure to open level");
+			}
 		}
 	}
 
@@ -100,8 +104,8 @@ public class TitleScreen extends Screen {
 			float titleX = windowSize.x / 2.5f;
 			float titleY = windowSize.y / 3.5f;
 			int fontSize = windowSize.x / 16;
-			title = new Message("M!", fontSize, Color.WHITE, new Vec2f(
-					titleX, titleY));
+			title = new Message("M!", fontSize, Color.WHITE, new Vec2f(titleX,
+					titleY));
 
 			float subTitleX = windowSize.x / 2.8f;
 			float subTitleY = windowSize.y / 2.5f;
@@ -109,8 +113,9 @@ public class TitleScreen extends Screen {
 			subtitle = new Message("Press Enter to start", subFontSize,
 					Color.WHITE, new Vec2f(subTitleX, subTitleY));
 
-			background = new AAB(new Vec2f(windowSize.x/2, windowSize.y/2), Color.BLACK,
-					Color.BLACK, new Vec2f(windowSize.x, windowSize.y));
+			background = new AAB(new Vec2f(windowSize.x / 2, windowSize.y / 2),
+					Color.BLACK, Color.BLACK, new Vec2f(windowSize.x,
+							windowSize.y));
 		} catch (Exception e) {
 			System.out.println("No window size defined");
 		}
